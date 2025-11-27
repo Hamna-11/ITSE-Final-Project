@@ -3,13 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Attendance Portal</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Student Portal - Login</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <h1>Student Attendance and Result Portal</h1>
-    <p>Welcome to the portal!</p>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>🎓 Student Portal</h1>
+            <p class="subtitle">Attendance & Result Management System</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="userRole">Select Role:</label>
+                    <select id="userRole" required>
+                        <option value="">-- Choose Role --</option>
+                        <option value="admin">Admin</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+            
+            <div class="demo-credentials">
+                <p><strong>Demo Credentials:</strong></p>
+                <p>Admin: admin / admin123</p>
+                <p>Teacher: teacher / teacher123</p>
+                <p>Student: student / student123</p>
+            </div>
+        </div>
+    </div>
     
-    <script src="js/main.js"></script>
+    <script src="./js/auth.js"></script>
 </body>
 </html>
