@@ -23,6 +23,13 @@ const users = {
     }
 };
 
+// Dashboard page mappings (YOUR FILE NAMES)
+const dashboardPages = {
+    admin: 'admin.html',
+    teacher: 'teacher.html',
+    student: 'student.html'
+};
+
 // ==================== LOGIN FORM HANDLER ====================
 // Get login form element
 const loginForm = document.getElementById('loginForm');
@@ -62,11 +69,8 @@ if (loginForm) {
             alert('✅ Login successful! Welcome ' + users[role].fullName);
             
             // Redirect to respective dashboard
-            // Uncomment below line when dashboard pages are ready
-            // window.location.href = role + '-dashboard.html';
-            
-            // For now, just log to console
-            console.log('✅ User logged in:', userData);
+            console.log('🔄 Redirecting to:', dashboardPages[role]);
+            window.location.href = dashboardPages[role];
             
         } else {
             // Invalid credentials
@@ -99,12 +103,27 @@ function checkAuth() {
     if (!currentUser) {
         // No user logged in, redirect to login page
         console.log('⚠️ No user logged in, redirecting...');
+        alert('⚠️ Please login first!');
         window.location.href = 'main.html';
         return null;
     }
     
     // Return user data
     return JSON.parse(currentUser);
+}
+
+// Check if user is already logged in and redirect to their dashboard
+function checkExistingSession() {
+    const currentUser = localStorage.getItem('currentUser');
+    
+    if (currentUser) {
+        const user = JSON.parse(currentUser);
+        console.log('✅ User already logged in:', user);
+        console.log('🔄 Redirecting to dashboard...');
+        
+        // Redirect to their dashboard
+        window.location.href = dashboardPages[user.role];
+    }
 }
 
 // Get current logged in user
@@ -129,4 +148,16 @@ if (currentUser) {
     console.log('✅ User already logged in:', currentUser);
 } else {
     console.log('ℹ️ No user logged in');
+}
+
+// If on login page, check for existing session and offer to redirect
+if (loginForm) {
+    const existingUser = getCurrentUser();
+    if (existingUser) {
+        console.log('ℹ️ User already logged in. Showing redirect option...');
+        const redirectNow = confirm('You are already logged in as ' + existingUser.fullName + '. Go to dashboard?');
+        if (redirectNow) {
+            window.location.href = dashboardPages[existingUser.role];
+        }
+    }
 }

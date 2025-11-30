@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Student Portal</title>
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-left">
+                <h2>🎓 Student Portal</h2>
+            </div>
+            <div class="navbar-right">
+                <span class="user-info" id="userInfo">Student</span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Student Panel</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-section="overview">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </li>
+                <li class="menu-item" data-section="attendance">
+                    <span class="menu-icon">📝</span>
+                    <span>My Attendance</span>
+                </li>
+                <li class="menu-item" data-section="results">
+                    <span class="menu-icon">📊</span>
+                    <span>My Results</span>
+                </li>
+                <li class="menu-item" data-section="courses">
+                    <span class="menu-icon">📚</span>
+                    <span>My Courses</span>
+                </li>
+                <li class="menu-item" data-section="profile">
+                    <span class="menu-icon">👤</span>
+                    <span>My Profile</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section class="content-section active" id="overview">
+                <div class="page-header">
+                    <div>
+                        <h1>Student Dashboard</h1>
+                        <p>Welcome back, <span id="studentName"></span></p>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📚</div>
+                        <div class="stat-info">
+                            <h3 id="totalCourses">0</h3>
+                            <p>Enrolled Courses</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">✅</div>
+                        <div class="stat-info">
+                            <h3 id="overallAttendance">0%</h3>
+                            <p>Overall Attendance</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">📊</div>
+                        <div class="stat-info">
+                            <h3 id="averageGrade">-</h3>
+                            <p>Average Grade</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">🏆</div>
+                        <div class="stat-info">
+                            <h3 id="totalAssessments">0</h3>
+                            <p>Assessments</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Alert -->
+                <div class="card" id="attendanceAlert" style="display: none; border-left: 4px solid #dc2626; background: #fee2e2;">
+                    <h3 style="color: #991b1b;">⚠️ Attendance Warning</h3>
+                    <p style="color: #7f1d1d;">Your attendance is below 75%. Please attend classes regularly to meet the minimum requirement.</p>
+                </div>
+
+                <!-- Quick Overview -->
+                <div class="card">
+                    <h2>Quick Overview</h2>
+                    <div class="reports-grid">
+                        <div class="card">
+                            <h3>📝 Attendance Status</h3>
+                            <p>Check your attendance percentage for all courses.</p>
+                            <button class="btn-primary" onclick="showSection('attendance')">View Attendance</button>
+                        </div>
+                        <div class="card">
+                            <h3>📊 Academic Performance</h3>
+                            <p>View your marks, grades, and performance reports.</p>
+                            <button class="btn-primary" onclick="showSection('results')">View Results</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Attendance Section -->
+            <section class="content-section" id="attendance">
+                <div class="page-header">
+                    <h1>My Attendance</h1>
+                    <p>View your attendance records for all courses</p>
+                </div>
+
+                <!-- Overall Attendance Card -->
+                <div class="card">
+                    <h2>Overall Attendance Summary</h2>
+                    <div class="attendance-summary">
+                        <div class="summary-item">
+                            <div class="summary-label">Total Classes:</div>
+                            <div class="summary-value" id="totalClasses">0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Classes Attended:</div>
+                            <div class="summary-value" id="classesAttended">0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Attendance Percentage:</div>
+                            <div class="summary-value" id="attendancePercentage">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course-wise Attendance -->
+                <div class="card">
+                    <h2>Course-wise Attendance</h2>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Total Classes</th>
+                                    <th>Present</th>
+                                    <th>Absent</th>
+                                    <th>Percentage</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <tr>
+                                    <td colspan="7" class="no-data">No attendance records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Detailed Attendance Log -->
+                <div class="card">
+                    <h2>Attendance Log</h2>
+                    <div class="form-group">
+                        <label>Filter by Course:</label>
+                        <select id="attendanceCourseFilter" onchange="filterAttendanceLog()">
+                            <option value="">All Courses</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceLogBody">
+                                <tr>
+                                    <td colspan="3" class="no-data">No records found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Results Section -->
+            <section class="content-section" id="results">
+                <div class="page-header">
+                    <h1>My Results</h1>
+                    <p>View your academic performance and grades</p>
+                </div>
+
+                <!-- Performance Summary -->
+                <div class="card">
+                    <h2>Performance Summary</h2>
+                    <div class="attendance-summary">
+                        <div class="summary-item">
+                            <div class="summary-label">Total Assessments:</div>
+                            <div class="summary-value" id="summaryTotalAssessments">0</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Average Percentage:</div>
+                            <div class="summary-value" id="summaryAvgPercentage">0%</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-label">Average Grade:</div>
+                            <div class="summary-value" id="summaryAvgGrade">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course-wise Results -->
+                <div class="card">
+                    <h2>Course-wise Results</h2>
+                    <div class="form-group">
+                        <label>Select Course:</label>
+                        <select id="resultsCourseFilter" onchange="filterCourseResults()">
+                            <option value="">-- Choose Course --</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Assessment Type</th>
+                                    <th>Total Marks</th>
+                                    <th>Obtained Marks</th>
+                                    <th>Percentage</th>
+                                    <th>Grade</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsTableBody">
+                                <tr>
+                                    <td colspan="6" class="no-data">No results found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Courses Section -->
+            <section class="content-section" id="courses">
+                <div class="page-header">
+                    <h1>My Courses</h1>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Teacher</th>
+                                    <th>Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myCoursesTableBody">
+                                <tr>
+                                    <td colspan="4" class="no-data">No courses enrolled</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Profile Section -->
+            <section class="content-section" id="profile">
+                <div class="page-header">
+                    <h1>My Profile</h1>
+                </div>
+
+                <div class="card">
+                    <h2>Student Information</h2>
+                    <div class="profile-info">
+                        <div class="profile-field">
+                            <strong>Full Name:</strong>
+                            <span id="profileName">-</span>
+                        </div>
+                        <div class="profile-field">
+                            <strong>Roll Number:</strong>
+                            <span id="profileRoll">-</span>
+                        </div>
+                        <div class="profile-field">
+                            <strong>Email:</strong>
+                            <span id="profileEmail">-</span>
+                        </div>
+                        <div class="profile-field">
+                            <strong>Enrolled Course:</strong>
+                            <span id="profileCourse">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="./js/auth.js"></script>
+    <script src="./js/student.js"></script>
+</body>
+</html>

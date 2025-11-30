@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Student Portal</title>
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-left">
+                <h2>🎓 Student Portal</h2>
+            </div>
+            <div class="navbar-right">
+                <span class="user-info" id="userInfo">Admin</span>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Panel</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-section="overview">
+                    <span class="menu-icon">📊</span>
+                    <span>Overview</span>
+                </li>
+                <li class="menu-item" data-section="users">
+                    <span class="menu-icon">👥</span>
+                    <span>User Management</span>
+                </li>
+                <li class="menu-item" data-section="courses">
+                    <span class="menu-icon">📚</span>
+                    <span>Course Management</span>
+                </li>
+                <li class="menu-item" data-section="reports">
+                    <span class="menu-icon">📈</span>
+                    <span>Reports & Analytics</span>
+                </li>
+                <li class="menu-item" data-section="settings">
+                    <span class="menu-icon">⚙️</span>
+                    <span>System Settings</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section class="content-section active" id="overview">
+                <div class="page-header">
+                    <h1>Dashboard Overview</h1>
+                    <p>Welcome back, Administrator</p>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">👥</div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">👨‍🏫</div>
+                        <div class="stat-info">
+                            <h3 id="totalTeachers">0</h3>
+                            <p>Teachers</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">👨‍🎓</div>
+                        <div class="stat-info">
+                            <h3 id="totalStudents">0</h3>
+                            <p>Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">📚</div>
+                        <div class="stat-info">
+                            <h3 id="totalCourses">0</h3>
+                            <p>Active Courses</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <h2>Recent System Activity</h2>
+                    <div class="activity-list" id="activityList">
+                        <p class="no-data">No recent activity</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- User Management Section -->
+            <section class="content-section" id="users">
+                <div class="page-header">
+                    <h1>User Management</h1>
+                    <button class="btn-primary" onclick="showAddUserModal()">+ Add New User</button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="6" class="no-data">No users found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Course Management Section -->
+            <section class="content-section" id="courses">
+                <div class="page-header">
+                    <h1>Course Management</h1>
+                    <button class="btn-primary" onclick="showAddCourseModal()">+ Add New Course</button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Name</th>
+                                    <th>Teacher</th>
+                                    <th>Students</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesTableBody">
+                                <tr>
+                                    <td colspan="5" class="no-data">No courses found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section class="content-section" id="reports">
+                <div class="page-header">
+                    <h1>Reports & Analytics</h1>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="card">
+                        <h3>📊 Attendance Reports</h3>
+                        <p>Generate attendance reports by class, course, or date range.</p>
+                        <button class="btn-secondary">Generate Report</button>
+                    </div>
+                    <div class="card">
+                        <h3>📈 Performance Analytics</h3>
+                        <p>View student performance trends and statistics.</p>
+                        <button class="btn-secondary">View Analytics</button>
+                    </div>
+                    <div class="card">
+                        <h3>📄 Result Summary</h3>
+                        <p>Download complete result sheets and grade reports.</p>
+                        <button class="btn-secondary">Download Reports</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="content-section" id="settings">
+                <div class="page-header">
+                    <h1>System Settings</h1>
+                </div>
+
+                <div class="card">
+                    <h3>Grading Criteria</h3>
+                    <form id="gradingForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>A Grade (90-100%)</label>
+                                <input type="number" value="90" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>B Grade (80-89%)</label>
+                                <input type="number" value="80" min="0" max="100">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>C Grade (70-79%)</label>
+                                <input type="number" value="70" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>D Grade (60-69%)</label>
+                                <input type="number" value="60" min="0" max="100">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Save Settings</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Attendance Threshold</h3>
+                    <div class="form-group">
+                        <label>Minimum Attendance Required (%)</label>
+                        <input type="number" value="75" min="0" max="100">
+                    </div>
+                    <button class="btn-primary">Update Threshold</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="./js/auth.js"></script>
+    <script src="./js/admin.js"></script>
+</body>
+</html>
