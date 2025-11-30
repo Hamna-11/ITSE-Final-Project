@@ -17,9 +17,9 @@ body {
     width: 100%;
     height: 100vh;
     display: flex;
-    align-items: center;        /* Vertically center karta hai */
-    justify-content: flex-start; /* Left se start karta hai */
-    padding-left: 15%;           /* Left se space - ADJUST THIS */
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
 }
 
 /* ==================== BACKGROUND IMAGE ==================== */
@@ -31,14 +31,12 @@ body {
     height: 100%;
     z-index: 1;
     
-    /* Your image path */
     background-image: url('../assets/images/pic.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-/* Dark overlay for better text contrast */
 .background-section::before {
     content: '';
     position: absolute;
@@ -50,18 +48,40 @@ body {
     z-index: 1;
 }
 
-/* ==================== LOGIN BOX (FLOATING CARD) ==================== */
+/* ==================== LOGIN BOX (WHITE + MORE TRANSPARENT) ==================== */
 .left-section {
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: 400px;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 35px 32px;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.75);   /* CHANGED - White + 25% transparent */
+    backdrop-filter: blur(20px);              /* INCREASED blur for glass effect */
+    -webkit-backdrop-filter: blur(20px);
+    padding: 45px 40px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+}
+
+/* Custom scrollbar */
+.left-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.left-section::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.left-section::-webkit-scrollbar-thumb {
+    background: rgba(30, 58, 138, 0.3);      /* CHANGED - Dark blue scrollbar */
+    border-radius: 10px;
+}
+
+.left-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(30, 58, 138, 0.5);
 }
 
 /* ==================== LOGIN BOX CONTENT ==================== */
@@ -70,144 +90,133 @@ body {
 }
 
 .login-box h1 {
-    color: #2c3e50;
-    margin-bottom: 6px;
-    font-size: 30px;
+    color: #1e3a8a;                          /* CHANGED - Dark blue text */
+    margin-bottom: 8px;
+    font-size: 34px;
     font-weight: 700;
+    text-align: center;
 }
 
 .subtitle {
-    color: #5a6c7d;
-    margin-bottom: 28px;
-    font-size: 13px;
+    color: #4b5563;                          /* CHANGED - Gray text */
+    margin-bottom: 32px;
+    font-size: 14px;
     line-height: 1.5;
+    text-align: center;
 }
 
 /* ==================== FORM STYLES ==================== */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 7px;
-    color: #2c3e50;
+    margin-bottom: 8px;
+    color: #2c3e50;                          /* Dark text */
     font-weight: 600;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 12px 14px;
+    padding: 14px 16px;
     border: 2px solid #e0e6ed;
-    border-radius: 0;
-    font-size: 14px;
+    border-radius: 6px;
+    font-size: 15px;
     transition: all 0.3s ease;
-    background: white;
+    background: rgba(255, 255, 255, 0.8);    /* CHANGED - Semi-transparent white */
     color: #2c3e50;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #667eea;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-group input::placeholder {
     color: #a0aec0;
 }
 
-/* ==================== BUTTON STYLES ==================== */
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #1e3a8a;                   /* CHANGED - Dark blue focus */
+    background: white;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.form-group select {
+    color: #2c3e50;
+}
+
+.form-group select option {
+    background: white;
+    color: #2c3e50;
+}
+
+/* ==================== BUTTON STYLES (DARK BLUE) ==================== */
 .btn-login {
     width: 100%;
-    padding: 14px;
-    background: #667eea;
-    color: white;
+    padding: 16px;
+    background: #1e3a8a;                     /* CHANGED - Solid dark blue */
+    color: #ffffff;
     border: none;
-    border-radius: 0;
-    font-size: 15px;
+    border-radius: 6px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-top: 8px;
+    margin-top: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .btn-login:hover {
-    background: #5568d3;
+    background: #1e40af;                     /* CHANGED - Slightly lighter blue on hover */
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
 }
 
 .btn-login:active {
     transform: translateY(0);
-}
-
-/* ==================== DEMO CREDENTIALS BOX ==================== */
-.demo-credentials {
-    margin-top: 22px;
-    padding: 14px 16px;
-    background: rgba(102, 126, 234, 0.08);
-    border-radius: 0;
-    font-size: 11.5px;
-    border-left: 3px solid #667eea;
-    line-height: 1.8;
-}
-
-.demo-credentials p {
-    margin: 4px 0;
-    color: #4a5568;
-}
-
-.demo-credentials p:first-child {
-    margin-bottom: 8px;
-}
-
-.demo-credentials strong {
-    color: #667eea;
-    font-weight: 700;
+    background: #1e3a8a;
 }
 
 /* ==================== RESPONSIVE DESIGN ==================== */
 @media (max-width: 1200px) {
     .main-container {
-        padding-left: 5%;
+        padding: 50px 30px;
+    }
+    
+    .left-section {
+        max-width: 480px;
     }
 }
 
 @media (max-width: 968px) {
     .main-container {
-        padding-left: 40px;
-        padding-right: 40px;
-        justify-content: center;
+        padding: 40px 30px;
     }
     
     .left-section {
         max-width: 450px;
-        padding: 32px 28px;
+        padding: 40px 35px;
     }
 }
 
 @media (max-width: 576px) {
     .main-container {
-        padding: 20px;
-        justify-content: center;
+        padding: 30px 20px;
     }
     
     .left-section {
         max-width: 100%;
-        padding: 28px 24px;
+        padding: 35px 28px;
+        border-radius: 10px;
     }
     
     .login-box h1 {
-        font-size: 26px;
+        font-size: 28px;
     }
     
     .subtitle {
-        font-size: 12px;
+        font-size: 13px;
     }
 }
