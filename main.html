@@ -8,39 +8,45 @@
 </head>
 <body>
     <div class="login-container">
-        <div class="login-box">
-            <h1>🎓 Student Portal</h1>
-            <p class="subtitle">Attendance & Result Management System</p>
-            
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="userRole">Select Role:</label>
-                    <select id="userRole" required>
-                        <option value="">-- Choose Role --</option>
-                        <option value="admin">Admin</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="student">Student</option>
-                    </select>
-                </div>
+        <!-- Background Image Section (Full Screen) -->
+        <div class="background-section"></div>
+
+        <!-- Login Box (Floating Left-Center) -->
+        <div class="left-section">
+            <div class="login-box">
+                <h1>🎓 Student Portal</h1>
+                <p class="subtitle">Attendance & Result Management System</p>
                 
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" placeholder="Enter username" required>
-                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="userRole">Select Role:</label>
+                        <select id="userRole" required>
+                            <option value="">-- Choose Role --</option>
+                            <option value="admin">Admin</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" placeholder="Enter username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" placeholder="Enter password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-login">Login</button>
+                </form>
                 
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" placeholder="Enter password" required>
+                <div class="demo-credentials">
+                    <p><strong>Demo Credentials:</strong></p>
+                    <p>Admin: admin / admin123</p>
+                    <p>Teacher: teacher / teacher123</p>
+                    <p>Student: student / student123</p>
                 </div>
-                
-                <button type="submit" class="btn-login">Login</button>
-            </form>
-            
-            <div class="demo-credentials">
-                <p><strong>Demo Credentials:</strong></p>
-                <p>Admin: admin / admin123</p>
-                <p>Teacher: teacher / teacher123</p>
-                <p>Student: student / student123</p>
             </div>
         </div>
     </div>
