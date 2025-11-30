@@ -1,13 +1,13 @@
 // ==================== AUTHENTICATION CHECK ====================
-const currentUser = checkAuth();
-if (!currentUser || currentUser.role !== 'student') {
+const loggedInUser = checkAuth();
+if (!loggedInUser || loggedInUser.role !== 'student') {
     alert('⚠️ Access Denied! Student privileges required.');
     window.location.href = 'main.html';
 }
 
 // Display student name
-document.getElementById('userInfo').textContent = currentUser.fullName;
-document.getElementById('studentName').textContent = currentUser.fullName;
+document.getElementById('userInfo').textContent = loggedInUser.fullName;
+document.getElementById('studentName').textContent = loggedInUser.fullName;
 
 // ==================== SIDEBAR NAVIGATION ====================
 const menuItems = document.querySelectorAll('.menu-item');
@@ -39,7 +39,7 @@ function showSection(sectionId) {
 function getStudentData() {
     const students = JSON.parse(localStorage.getItem('students')) || [];
     // Find student by username (assuming username matches part of name)
-    return students.find(s => s.name === currentUser.fullName) || students[0];
+    return students.find(s => s.name === loggedInUser.fullName) || students[0];
 }
 
 const studentData = getStudentData();
@@ -383,7 +383,7 @@ function loadMyCourses() {
 
 // ==================== LOAD PROFILE ====================
 function loadProfile() {
-    document.getElementById('profileName').textContent = currentUser.fullName;
+    document.getElementById('profileName').textContent = loggedInUser.fullName;
     document.getElementById('profileRoll').textContent = studentRollNo;
     document.getElementById('profileEmail').textContent = studentData ? studentData.email : 'student@example.com';
     document.getElementById('profileCourse').textContent = studentCourse;
@@ -397,5 +397,5 @@ loadMyCourses();
 loadProfile();
 
 console.log('✅ Student Dashboard loaded successfully');
-console.log('👤 Current User:', currentUser);
+console.log('👤 Current User:', loggedInUser);
 console.log('📝 Student Data:', studentData);

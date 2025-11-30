@@ -1,13 +1,13 @@
 // ==================== AUTHENTICATION CHECK ====================
-const currentUser = checkAuth();
-if (!currentUser || currentUser.role !== 'teacher') {
+const loggedInUser = checkAuth();
+if (!loggedInUser || loggedInUser.role !== 'teacher') {
     alert('⚠️ Access Denied! Teacher privileges required.');
     window.location.href = 'main.html';
 }
 
 // Display teacher name
-document.getElementById('userInfo').textContent = currentUser.fullName;
-document.getElementById('teacherName').textContent = currentUser.fullName;
+document.getElementById('userInfo').textContent = loggedInUser.fullName;
+document.getElementById('teacherName').textContent = loggedInUser.fullName;
 
 // ==================== SIDEBAR NAVIGATION ====================
 const menuItems = document.querySelectorAll('.menu-item');
@@ -68,7 +68,7 @@ function loadOverviewStats() {
     const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
     
     // Filter teacher's courses
-    const teacherCourses = courses.filter(c => c.teacher === currentUser.fullName);
+    const teacherCourses = courses.filter(c => c.teacher === loggedInUser.fullName);
     
     document.getElementById('totalCourses').textContent = teacherCourses.length;
     document.getElementById('totalStudents').textContent = students.length;
@@ -178,7 +178,7 @@ function saveAttendance() {
     const record = {
         courseCode: courseCode,
         date: date,
-        markedBy: currentUser.fullName,
+        markedBy: loggedInUser.fullName,
         timestamp: new Date().toISOString(),
         students: []
     };
@@ -318,7 +318,7 @@ function saveResults() {
         courseCode: courseCode,
         assessmentType: assessmentType,
         totalMarks: parseInt(totalMarks),
-        uploadedBy: currentUser.fullName,
+        uploadedBy: loggedInUser.fullName,
         timestamp: new Date().toISOString(),
         approved: true, // Auto-approve for demo
         students: []
@@ -356,4 +356,4 @@ initializeTeacherData();
 loadOverviewStats();
 
 console.log('✅ Teacher Dashboard loaded successfully');
-console.log('👤 Current User:', currentUser);
+console.log('👤 Current User:', loggedInUser);

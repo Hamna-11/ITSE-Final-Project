@@ -1,13 +1,13 @@
 // ==================== AUTHENTICATION CHECK ====================
 // Check if user is logged in and has admin role
-const currentUser = checkAuth();
-if (!currentUser || currentUser.role !== 'admin') {
+const loggedInUser = checkAuth();
+if (!loggedInUser || loggedInUser.role !== 'admin') {
     alert('⚠️ Access Denied! Admin privileges required.');
     window.location.href = 'main.html';
 }
 
 // Display user name in navbar
-document.getElementById('userInfo').textContent = currentUser.fullName;
+document.getElementById('userInfo').textContent = loggedInUser.fullName;
 
 // ==================== SIDEBAR NAVIGATION ====================
 const menuItems = document.querySelectorAll('.menu-item');
@@ -266,4 +266,4 @@ loadCoursesTable();
 
 // Console log for debugging
 console.log('✅ Admin Dashboard loaded successfully');
-console.log('👤 Current User:', currentUser);
+console.log('👤 Current User:', loggedInUser);
