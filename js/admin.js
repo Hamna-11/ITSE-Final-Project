@@ -1,12 +1,10 @@
 // ==================== AUTHENTICATION CHECK ====================
-// Check if user is logged in and has admin role
 const loggedInUser = checkAuth();
 if (!loggedInUser || loggedInUser.role !== 'admin') {
-    alert('⚠️ Access Denied! Admin privileges required.');
+    alert('Access Denied! Admin privileges required.');
     window.location.href = 'main.html';
 }
 
-// Display user name in navbar
 document.getElementById('userInfo').textContent = loggedInUser.fullName;
 
 // ==================== SIDEBAR NAVIGATION ====================
@@ -15,14 +13,11 @@ const contentSections = document.querySelectorAll('.content-section');
 
 menuItems.forEach(item => {
     item.addEventListener('click', function() {
-        // Remove active class from all items
         menuItems.forEach(mi => mi.classList.remove('active'));
         contentSections.forEach(cs => cs.classList.remove('active'));
         
-        // Add active class to clicked item
         this.classList.add('active');
         
-        // Show corresponding section
         const sectionId = this.getAttribute('data-section');
         document.getElementById(sectionId).classList.add('active');
     });
@@ -30,7 +25,6 @@ menuItems.forEach(item => {
 
 // ==================== INITIALIZE SAMPLE DATA ====================
 function initializeSampleData() {
-    // Check if data already exists
     if (!localStorage.getItem('systemUsers')) {
         const sampleUsers = [
             { id: 1, name: 'John Teacher', username: 'teacher', role: 'teacher', status: 'active' },
@@ -73,7 +67,6 @@ function loadOverviewStats() {
     document.getElementById('totalStudents').textContent = students;
     document.getElementById('totalCourses').textContent = courses.length;
     
-    // Load recent activity
     loadRecentActivity();
 }
 
@@ -112,11 +105,24 @@ function loadUsersTable() {
             <td><span class="status-badge">${user.role}</span></td>
             <td><span class="status-badge ${user.status}">${user.status}</span></td>
             <td>
-                <button class="btn-edit" onclick="editUser(${user.id})">Edit</button>
-                <button class="btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                <button class="btn-edit" data-user-id="${user.id}">Edit</button>
+                <button class="btn-danger" data-user-delete="${user.id}">Delete</button>
             </td>
         </tr>
     `).join('');
+    
+    // Add event listeners to dynamically created buttons
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', function() {
+            editUser(parseInt(this.getAttribute('data-user-id')));
+        });
+    });
+    
+    document.querySelectorAll('.btn-danger').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteUser(parseInt(this.getAttribute('data-user-delete')));
+        });
+    });
 }
 
 function showAddUserModal() {
@@ -144,7 +150,7 @@ function showAddUserModal() {
     users.push(newUser);
     localStorage.setItem('systemUsers', JSON.stringify(users));
     
-    alert('✅ User added successfully!');
+    alert('User added successfully!');
     loadUsersTable();
     loadOverviewStats();
 }
@@ -159,7 +165,7 @@ function editUser(userId) {
     if (newName) user.name = newName;
     
     localStorage.setItem('systemUsers', JSON.stringify(users));
-    alert('✅ User updated successfully!');
+    alert('User updated successfully!');
     loadUsersTable();
 }
 
@@ -170,7 +176,7 @@ function deleteUser(userId) {
     users = users.filter(u => u.id !== userId);
     
     localStorage.setItem('systemUsers', JSON.stringify(users));
-    alert('✅ User deleted successfully!');
+    alert('User deleted successfully!');
     loadUsersTable();
     loadOverviewStats();
 }
@@ -192,11 +198,24 @@ function loadCoursesTable() {
             <td>${course.teacher}</td>
             <td>${course.students}</td>
             <td>
-                <button class="btn-edit" onclick="editCourse(${index})">Edit</button>
-                <button class="btn-danger" onclick="deleteCourse(${index})">Delete</button>
+                <button class="btn-edit" data-course-index="${index}">Edit</button>
+                <button class="btn-danger" data-course-delete="${index}">Delete</button>
             </td>
         </tr>
     `).join('');
+    
+    // Add event listeners
+    document.querySelectorAll('[data-course-index]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            editCourse(parseInt(this.getAttribute('data-course-index')));
+        });
+    });
+    
+    document.querySelectorAll('[data-course-delete]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteCourse(parseInt(this.getAttribute('data-course-delete')));
+        });
+    });
 }
 
 function showAddCourseModal() {
@@ -220,7 +239,7 @@ function showAddCourseModal() {
     courses.push(newCourse);
     localStorage.setItem('courses', JSON.stringify(courses));
     
-    alert('✅ Course added successfully!');
+    alert('Course added successfully!');
     loadCoursesTable();
     loadOverviewStats();
 }
@@ -235,7 +254,7 @@ function editCourse(index) {
     if (newName) course.name = newName;
     
     localStorage.setItem('courses', JSON.stringify(courses));
-    alert('✅ Course updated successfully!');
+    alert('Course updated successfully!');
     loadCoursesTable();
 }
 
@@ -246,24 +265,31 @@ function deleteCourse(index) {
     courses.splice(index, 1);
     
     localStorage.setItem('courses', JSON.stringify(courses));
-    alert('✅ Course deleted successfully!');
+    alert('Course deleted successfully!');
     loadCoursesTable();
     loadOverviewStats();
 }
 
+// ==================== EVENT LISTENERS ====================
+document.addEventListener('DOMContentLoaded', function() {
+    // Add User button
+    const addUserBtn = document.getElementById('addUserBtn');
+    if (addUserBtn) {
+        addUserBtn.addEventListener('click', showAddUserModal);
+    }
+    
+    // Add Course button
+    const addCourseBtn = document.getElementById('addCourseBtn');
+    if (addCourseBtn) {
+        addCourseBtn.addEventListener('click', showAddCourseModal);
+    }
+});
+
 // ==================== INITIALIZATION ====================
-// Initialize sample data on first load
 initializeSampleData();
-
-// Load overview stats
 loadOverviewStats();
-
-// Load users table
 loadUsersTable();
-
-// Load courses table
 loadCoursesTable();
 
-// Console log for debugging
-console.log('✅ Admin Dashboard loaded successfully');
-console.log('👤 Current User:', loggedInUser);
+console.log('Admin Dashboard loaded successfully');
+console.log('Current User:', loggedInUser);

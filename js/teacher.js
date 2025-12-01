@@ -1,11 +1,10 @@
 // ==================== AUTHENTICATION CHECK ====================
 const loggedInUser = checkAuth();
 if (!loggedInUser || loggedInUser.role !== 'teacher') {
-    alert('⚠️ Access Denied! Teacher privileges required.');
+    alert('Access Denied! Teacher privileges required.');
     window.location.href = 'main.html';
 }
 
-// Display teacher name
 document.getElementById('userInfo').textContent = loggedInUser.fullName;
 document.getElementById('teacherName').textContent = loggedInUser.fullName;
 
@@ -24,7 +23,16 @@ menuItems.forEach(item => {
     });
 });
 
-// Helper function to show section programmatically
+// Navigation buttons
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-navigate]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const sectionId = this.getAttribute('data-navigate');
+            showSection(sectionId);
+        });
+    });
+});
+
 function showSection(sectionId) {
     menuItems.forEach(mi => mi.classList.remove('active'));
     contentSections.forEach(cs => cs.classList.remove('active'));
@@ -37,7 +45,6 @@ function showSection(sectionId) {
 
 // ==================== INITIALIZE SAMPLE DATA ====================
 function initializeTeacherData() {
-    // Sample students for teacher's courses
     if (!localStorage.getItem('students')) {
         const sampleStudents = [
             { rollNo: '2024-001', name: 'Jane Student', course: 'CS101', email: 'jane@example.com' },
@@ -49,12 +56,10 @@ function initializeTeacherData() {
         localStorage.setItem('students', JSON.stringify(sampleStudents));
     }
     
-    // Initialize attendance records
     if (!localStorage.getItem('attendanceRecords')) {
         localStorage.setItem('attendanceRecords', JSON.stringify([]));
     }
     
-    // Initialize results records
     if (!localStorage.getItem('resultsRecords')) {
         localStorage.setItem('resultsRecords', JSON.stringify([]));
     }
@@ -67,7 +72,6 @@ function loadOverviewStats() {
     const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
     const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
     
-    // Filter teacher's courses
     const teacherCourses = courses.filter(c => c.teacher === loggedInUser.fullName);
     
     document.getElementById('totalCourses').textContent = teacherCourses.length;
@@ -75,7 +79,6 @@ function loadOverviewStats() {
     document.getElementById('attendanceMarked').textContent = attendanceRecords.length;
     document.getElementById('resultsUploaded').textContent = resultsRecords.length;
     
-    // Load courses in dropdowns
     loadCoursesDropdown();
     loadMyCourses();
 }
@@ -83,16 +86,14 @@ function loadOverviewStats() {
 // ==================== LOAD COURSES DROPDOWN ====================
 function loadCoursesDropdown() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
-    const teacherCourses = courses.filter(c => c.teacher === currentUser.fullName);
+    const teacherCourses = courses.filter(c => c.teacher === loggedInUser.fullName);
     
-    // Populate attendance course dropdown
     const courseSelect = document.getElementById('courseSelect');
     courseSelect.innerHTML = '<option value="">-- Choose Course --</option>';
     teacherCourses.forEach(course => {
         courseSelect.innerHTML += `<option value="${course.code}">${course.code} - ${course.name}</option>`;
     });
     
-    // Populate results course dropdown
     const resultsCourseSelect = document.getElementById('resultsCourseSelect');
     resultsCourseSelect.innerHTML = '<option value="">-- Choose Course --</option>';
     teacherCourses.forEach(course => {
@@ -103,7 +104,7 @@ function loadCoursesDropdown() {
 // ==================== LOAD MY COURSES TABLE ====================
 function loadMyCourses() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
-    const teacherCourses = courses.filter(c => c.teacher === currentUser.fullName);
+    const teacherCourses = courses.filter(c => c.teacher === loggedInUser.fullName);
     const tbody = document.getElementById('myCoursesTableBody');
     
     if (teacherCourses.length === 0) {
@@ -124,7 +125,6 @@ function loadMyCourses() {
 }
 
 // ==================== ATTENDANCE MANAGEMENT ====================
-// Set today's date as default
 document.getElementById('attendanceDate').valueAsDate = new Date();
 
 function loadStudentsForAttendance() {
@@ -132,7 +132,7 @@ function loadStudentsForAttendance() {
     const date = document.getElementById('attendanceDate').value;
     
     if (!courseCode || !date) {
-        alert('⚠️ Please select both course and date!');
+        alert('Please select both course and date!');
         return;
     }
     
@@ -140,7 +140,7 @@ function loadStudentsForAttendance() {
     const courseStudents = students.filter(s => s.course === courseCode);
     
     if (courseStudents.length === 0) {
-        alert('⚠️ No students found for this course!');
+        alert('No students found for this course!');
         return;
     }
     
@@ -151,9 +151,9 @@ function loadStudentsForAttendance() {
             <td>${student.name}</td>
             <td>
                 <select class="attendance-status" data-roll="${student.rollNo}">
-                    <option value="present">Present ✅</option>
-                    <option value="absent">Absent ❌</option>
-                    <option value="late">Late ⏰</option>
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="late">Late</option>
                 </select>
             </td>
         </tr>
@@ -168,49 +168,49 @@ function saveAttendance() {
     const statusSelects = document.querySelectorAll('.attendance-status');
     
     if (statusSelects.length === 0) {
-        alert('⚠️ No attendance data to save!');
+        alert('No attendance data to save!');
         return;
     }
     
-    const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
-    
-    // Create attendance record
-    const record = {
-        courseCode: courseCode,
-        date: date,
-        markedBy: loggedInUser.fullName,
-        timestamp: new Date().toISOString(),
-        students: []
-    };
-    
-    statusSelects.forEach(select => {
-        record.students.push({
-            rollNo: select.getAttribute('data-roll'),
-            status: select.value
+    try {
+        const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+        
+        const record = {
+            courseCode: courseCode,
+            date: date,
+            markedBy: loggedInUser.fullName,
+            timestamp: new Date().toISOString(),
+            students: []
+        };
+        
+        statusSelects.forEach(select => {
+            record.students.push({
+                rollNo: select.getAttribute('data-roll'),
+                status: select.value
+            });
         });
-    });
-    
-    // Check if attendance already exists for this date and course
-    const existingIndex = attendanceRecords.findIndex(
-        r => r.courseCode === courseCode && r.date === date
-    );
-    
-    if (existingIndex >= 0) {
-        // Update existing record
-        attendanceRecords[existingIndex] = record;
-        alert('✅ Attendance updated successfully!');
-    } else {
-        // Add new record
-        attendanceRecords.push(record);
-        alert('✅ Attendance saved successfully!');
+        
+        const existingIndex = attendanceRecords.findIndex(
+            r => r.courseCode === courseCode && r.date === date
+        );
+        
+        if (existingIndex >= 0) {
+            attendanceRecords[existingIndex] = record;
+            alert('Attendance updated successfully!');
+        } else {
+            attendanceRecords.push(record);
+            alert('Attendance saved successfully!');
+        }
+        
+        localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
+        
+        document.getElementById('attendanceTableCard').style.display = 'none';
+        document.getElementById('courseSelect').value = '';
+        loadOverviewStats();
+    } catch (error) {
+        console.error('Error saving attendance:', error);
+        alert('Failed to save attendance. Please try again.');
     }
-    
-    localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
-    
-    // Reset form
-    document.getElementById('attendanceTableCard').style.display = 'none';
-    document.getElementById('courseSelect').value = '';
-    loadOverviewStats();
 }
 
 // ==================== RESULTS MANAGEMENT ====================
@@ -220,7 +220,7 @@ function loadStudentsForResults() {
     const totalMarks = document.getElementById('totalMarks').value;
     
     if (!courseCode || !assessmentType || !totalMarks) {
-        alert('⚠️ Please fill all fields!');
+        alert('Please fill all fields!');
         return;
     }
     
@@ -228,7 +228,7 @@ function loadStudentsForResults() {
     const courseStudents = students.filter(s => s.course === courseCode);
     
     if (courseStudents.length === 0) {
-        alert('⚠️ No students found for this course!');
+        alert('No students found for this course!');
         return;
     }
     
@@ -244,8 +244,7 @@ function loadStudentsForResults() {
                        min="0" 
                        max="${totalMarks}" 
                        placeholder="Enter marks"
-                       style="width: 120px; padding: 8px; border: 2px solid #e5e7eb; border-radius: 4px;"
-                       oninput="calculateGrade(this, ${totalMarks})">
+                       style="width: 120px; padding: 8px; border: 2px solid #e5e7eb; border-radius: 4px;">
             </td>
             <td>
                 <span class="grade-display" data-roll="${student.rollNo}">-</span>
@@ -253,17 +252,29 @@ function loadStudentsForResults() {
         </tr>
     `).join('');
     
+    // Add event listeners to marks inputs
+    document.querySelectorAll('.marks-input').forEach(input => {
+        input.addEventListener('input', function() {
+            calculateGrade(this, parseInt(totalMarks));
+        });
+    });
+    
     document.getElementById('resultsTableCard').style.display = 'block';
 }
 
-// Calculate grade based on marks
 function calculateGrade(input, totalMarks) {
     const marks = parseFloat(input.value);
     const rollNo = input.getAttribute('data-roll');
     const gradeDisplay = document.querySelector(`.grade-display[data-roll="${rollNo}"]`);
     
-    if (!marks || marks < 0 || marks > totalMarks) {
+    if (isNaN(marks) || marks < 0) {
         gradeDisplay.textContent = '-';
+        return;
+    }
+    
+    if (marks > totalMarks) {
+        alert(`Marks cannot exceed ${totalMarks}`);
+        input.value = totalMarks;
         return;
     }
     
@@ -291,69 +302,94 @@ function calculateGrade(input, totalMarks) {
 function saveResults() {
     const courseCode = document.getElementById('resultsCourseSelect').value;
     const assessmentType = document.getElementById('assessmentType').value;
-    const totalMarks = document.getElementById('totalMarks').value;
+    const totalMarks = parseInt(document.getElementById('totalMarks').value);
     const marksInputs = document.querySelectorAll('.marks-input');
     
     if (marksInputs.length === 0) {
-        alert('⚠️ No results data to save!');
+        alert('No results data to save!');
         return;
     }
     
-    // Validate all marks are entered
     let allEntered = true;
     marksInputs.forEach(input => {
         if (!input.value) allEntered = false;
     });
     
     if (!allEntered) {
-        if (!confirm('⚠️ Some marks are missing. Do you want to continue?')) {
+        if (!confirm('Some marks are missing. Do you want to continue?')) {
             return;
         }
     }
     
-    const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
-    
-    // Create result record
-    const record = {
-        courseCode: courseCode,
-        assessmentType: assessmentType,
-        totalMarks: parseInt(totalMarks),
-        uploadedBy: loggedInUser.fullName,
-        timestamp: new Date().toISOString(),
-        approved: true, // Auto-approve for demo
-        students: []
-    };
-    
-    marksInputs.forEach(input => {
-        const rollNo = input.getAttribute('data-roll');
-        const marks = parseFloat(input.value) || 0;
-        const gradeDisplay = document.querySelector(`.grade-display[data-roll="${rollNo}"]`);
-        const grade = gradeDisplay.textContent;
+    try {
+        const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
         
-        record.students.push({
-            rollNo: rollNo,
-            marks: marks,
-            grade: grade,
-            percentage: ((marks / totalMarks) * 100).toFixed(2)
+        const record = {
+            courseCode: courseCode,
+            assessmentType: assessmentType,
+            totalMarks: totalMarks,
+            uploadedBy: loggedInUser.fullName,
+            timestamp: new Date().toISOString(),
+            approved: true,
+            students: []
+        };
+        
+        marksInputs.forEach(input => {
+            const rollNo = input.getAttribute('data-roll');
+            const marks = parseFloat(input.value) || 0;
+            const gradeDisplay = document.querySelector(`.grade-display[data-roll="${rollNo}"]`);
+            const grade = gradeDisplay.textContent;
+            
+            record.students.push({
+                rollNo: rollNo,
+                marks: marks,
+                grade: grade,
+                percentage: ((marks / totalMarks) * 100).toFixed(2)
+            });
         });
-    });
-    
-    resultsRecords.push(record);
-    localStorage.setItem('resultsRecords', JSON.stringify(resultsRecords));
-    
-    alert('✅ Results saved successfully!');
-    
-    // Reset form
-    document.getElementById('resultsTableCard').style.display = 'none';
-    document.getElementById('resultsCourseSelect').value = '';
-    document.getElementById('assessmentType').value = '';
-    document.getElementById('totalMarks').value = '';
-    loadOverviewStats();
+        
+        resultsRecords.push(record);
+        localStorage.setItem('resultsRecords', JSON.stringify(resultsRecords));
+        
+        alert('Results saved successfully!');
+        
+        document.getElementById('resultsTableCard').style.display = 'none';
+        document.getElementById('resultsCourseSelect').value = '';
+        document.getElementById('assessmentType').value = '';
+        document.getElementById('totalMarks').value = '';
+        loadOverviewStats();
+    } catch (error) {
+        console.error('Error saving results:', error);
+        alert('Failed to save results. Please try again.');
+    }
 }
+
+// ==================== EVENT LISTENERS ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const loadStudentsBtn = document.getElementById('loadStudentsBtn');
+    if (loadStudentsBtn) {
+        loadStudentsBtn.addEventListener('click', loadStudentsForAttendance);
+    }
+    
+    const saveAttendanceBtn = document.getElementById('saveAttendanceBtn');
+    if (saveAttendanceBtn) {
+        saveAttendanceBtn.addEventListener('click', saveAttendance);
+    }
+    
+    const loadResultsStudentsBtn = document.getElementById('loadResultsStudentsBtn');
+    if (loadResultsStudentsBtn) {
+        loadResultsStudentsBtn.addEventListener('click', loadStudentsForResults);
+    }
+    
+    const saveResultsBtn = document.getElementById('saveResultsBtn');
+    if (saveResultsBtn) {
+        saveResultsBtn.addEventListener('click', saveResults);
+    }
+});
 
 // ==================== INITIALIZATION ====================
 initializeTeacherData();
 loadOverviewStats();
 
-console.log('✅ Teacher Dashboard loaded successfully');
-console.log('👤 Current User:', loggedInUser);
+console.log('Teacher Dashboard loaded successfully');
+console.log('Current User:', loggedInUser);

@@ -1,13 +1,11 @@
 // ==================== STORAGE INITIALIZATION MODULE ====================
-// This file initializes all sample data for the application
 
-// ==================== INITIALIZE ALL DATA ====================
 function initializeAllData() {
-    console.log('🔄 Checking localStorage data...');
+    console.log('Checking localStorage data...');
     
     // Initialize System Users
     if (!localStorage.getItem('systemUsers')) {
-        console.log('📝 Initializing system users...');
+        console.log('Initializing system users...');
         const systemUsers = [
             { id: 1, name: 'System Administrator', username: 'admin', role: 'admin', status: 'active' },
             { id: 2, name: 'John Teacher', username: 'teacher', role: 'teacher', status: 'active' },
@@ -17,12 +15,12 @@ function initializeAllData() {
             { id: 6, name: 'Charlie Brown', username: 'charlie', role: 'student', status: 'active' }
         ];
         localStorage.setItem('systemUsers', JSON.stringify(systemUsers));
-        console.log('✅ System users initialized');
+        console.log('System users initialized');
     }
     
     // Initialize Courses
     if (!localStorage.getItem('courses')) {
-        console.log('📚 Initializing courses...');
+        console.log('Initializing courses...');
         const courses = [
             { 
                 code: 'CS101', 
@@ -50,12 +48,12 @@ function initializeAllData() {
             }
         ];
         localStorage.setItem('courses', JSON.stringify(courses));
-        console.log('✅ Courses initialized');
+        console.log('Courses initialized');
     }
     
     // Initialize Students
     if (!localStorage.getItem('students')) {
-        console.log('👨‍🎓 Initializing students...');
+        console.log('Initializing students...');
         const students = [
             { rollNo: '2024-001', name: 'Jane Student', course: 'CS101', email: 'jane@example.com' },
             { rollNo: '2024-002', name: 'Alice Johnson', course: 'CS101', email: 'alice@example.com' },
@@ -66,12 +64,12 @@ function initializeAllData() {
             { rollNo: '2024-007', name: 'Frank Cooper', course: 'DB401', email: 'frank@example.com' }
         ];
         localStorage.setItem('students', JSON.stringify(students));
-        console.log('✅ Students initialized');
+        console.log('Students initialized');
     }
     
     // Initialize Attendance Records (Sample)
     if (!localStorage.getItem('attendanceRecords')) {
-        console.log('📝 Initializing attendance records...');
+        console.log('Initializing attendance records...');
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
@@ -113,12 +111,12 @@ function initializeAllData() {
             }
         ];
         localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
-        console.log('✅ Attendance records initialized');
+        console.log('Attendance records initialized');
     }
     
     // Initialize Results Records (Sample)
     if (!localStorage.getItem('resultsRecords')) {
-        console.log('📊 Initializing results records...');
+        console.log('Initializing results records...');
         const resultsRecords = [
             {
                 courseCode: 'CS101',
@@ -160,12 +158,12 @@ function initializeAllData() {
             }
         ];
         localStorage.setItem('resultsRecords', JSON.stringify(resultsRecords));
-        console.log('✅ Results records initialized');
+        console.log('Results records initialized');
     }
     
     // Initialize System Activity
     if (!localStorage.getItem('systemActivity')) {
-        console.log('📋 Initializing system activity...');
+        console.log('Initializing system activity...');
         const systemActivity = [
             { action: 'User Login', user: 'John Teacher', time: new Date().toLocaleString() },
             { action: 'Attendance Marked', user: 'John Teacher', time: new Date().toLocaleString() },
@@ -174,11 +172,11 @@ function initializeAllData() {
             { action: 'Student Enrolled', user: 'System Administrator', time: new Date().toLocaleString() }
         ];
         localStorage.setItem('systemActivity', JSON.stringify(systemActivity));
-        console.log('✅ System activity initialized');
+        console.log('System activity initialized');
     }
     
-    console.log('✅ All data initialization complete!');
-    console.log('📊 Current localStorage data:', {
+    console.log('All data initialization complete!');
+    console.log('Current localStorage data:', {
         systemUsers: JSON.parse(localStorage.getItem('systemUsers') || '[]').length,
         courses: JSON.parse(localStorage.getItem('courses') || '[]').length,
         students: JSON.parse(localStorage.getItem('students') || '[]').length,
@@ -187,9 +185,9 @@ function initializeAllData() {
     });
 }
 
-// ==================== CLEAR ALL DATA (FOR TESTING) ====================
+// ==================== CLEAR ALL DATA ====================
 function clearAllData() {
-    console.log('🗑️ Clearing all data...');
+    console.log('Clearing all data...');
     localStorage.removeItem('systemUsers');
     localStorage.removeItem('courses');
     localStorage.removeItem('students');
@@ -197,16 +195,15 @@ function clearAllData() {
     localStorage.removeItem('resultsRecords');
     localStorage.removeItem('systemActivity');
     localStorage.removeItem('currentUser');
-    console.log('✅ All data cleared!');
+    console.log('All data cleared!');
 }
 
 // ==================== AUTO INITIALIZE ON LOAD ====================
-// Automatically initialize data when this script loads
 initializeAllData();
 
 // Export functions for manual use
 window.initializeAllData = initializeAllData;
 window.clearAllData = clearAllData;
 
-console.log('🔐 Storage module loaded successfully');
-console.log('💡 Use clearAllData() in console to reset everything');
+console.log('Storage module loaded successfully');
+console.log('Use clearAllData() in console to reset everything');

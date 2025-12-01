@@ -11,11 +11,11 @@
     <nav class="navbar">
         <div class="navbar-content">
             <div class="navbar-left">
-                <h2>🎓 Student Portal - Teacher</h2>
+                <h2>Student Portal - Teacher</h2>
             </div>
             <div class="navbar-right">
                 <span class="user-info" id="userInfo">Teacher</span>
-                <button class="btn-logout" onclick="logout()">Logout</button>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
             </div>
         </div>
     </nav>
@@ -29,23 +29,18 @@
             </div>
             <ul class="sidebar-menu">
                 <li class="menu-item active" data-section="overview">
-                    <span class="menu-icon">📊</span>
                     <span>Dashboard</span>
                 </li>
                 <li class="menu-item" data-section="attendance">
-                    <span class="menu-icon">📝</span>
                     <span>Mark Attendance</span>
                 </li>
                 <li class="menu-item" data-section="results">
-                    <span class="menu-icon">📊</span>
                     <span>Upload Results</span>
                 </li>
                 <li class="menu-item" data-section="mycourses">
-                    <span class="menu-icon">📚</span>
                     <span>My Courses</span>
                 </li>
                 <li class="menu-item" data-section="reports">
-                    <span class="menu-icon">📈</span>
                     <span>View Reports</span>
                 </li>
             </ul>
@@ -65,28 +60,28 @@
                 <!-- Statistics Cards -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon blue">📚</div>
+                        <div class="stat-icon blue"></div>
                         <div class="stat-info">
                             <h3 id="totalCourses">0</h3>
                             <p>My Courses</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon green">👨‍🎓</div>
+                        <div class="stat-icon green"></div>
                         <div class="stat-info">
                             <h3 id="totalStudents">0</h3>
                             <p>Total Students</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon orange">📝</div>
+                        <div class="stat-icon orange"></div>
                         <div class="stat-info">
                             <h3 id="attendanceMarked">0</h3>
                             <p>Attendance Marked</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon purple">📊</div>
+                        <div class="stat-icon purple"></div>
                         <div class="stat-info">
                             <h3 id="resultsUploaded">0</h3>
                             <p>Results Uploaded</p>
@@ -99,14 +94,14 @@
                     <h2>Quick Actions</h2>
                     <div class="reports-grid">
                         <div class="card">
-                            <h3>📝 Mark Attendance</h3>
+                            <h3>Mark Attendance</h3>
                             <p>Quickly mark today's attendance for your classes.</p>
-                            <button class="btn-primary" onclick="showSection('attendance')">Go to Attendance</button>
+                            <button class="btn-primary" data-navigate="attendance">Go to Attendance</button>
                         </div>
                         <div class="card">
-                            <h3>📊 Upload Results</h3>
+                            <h3>Upload Results</h3>
                             <p>Enter and upload student marks and grades.</p>
-                            <button class="btn-primary" onclick="showSection('results')">Upload Results</button>
+                            <button class="btn-primary" data-navigate="results">Upload Results</button>
                         </div>
                     </div>
                 </div>
@@ -133,7 +128,7 @@
                                 <input type="date" id="attendanceDate" required>
                             </div>
                         </div>
-                        <button type="button" class="btn-primary" onclick="loadStudentsForAttendance()">Load Students</button>
+                        <button type="button" class="btn-primary" id="loadStudentsBtn">Load Students</button>
                     </form>
                 </div>
 
@@ -152,7 +147,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" class="btn-primary" style="margin-top: 20px;" onclick="saveAttendance()">Save Attendance</button>
+                    <button type="button" class="btn-primary" style="margin-top: 20px;" id="saveAttendanceBtn">Save Attendance</button>
                 </div>
             </section>
 
@@ -187,7 +182,7 @@
                             <label>Total Marks:</label>
                             <input type="number" id="totalMarks" min="1" required>
                         </div>
-                        <button type="button" class="btn-primary" onclick="loadStudentsForResults()">Load Students</button>
+                        <button type="button" class="btn-primary" id="loadResultsStudentsBtn">Load Students</button>
                     </form>
                 </div>
 
@@ -207,7 +202,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <button type="button" class="btn-primary" style="margin-top: 20px;" onclick="saveResults()">Save Results</button>
+                    <button type="button" class="btn-primary" style="margin-top: 20px;" id="saveResultsBtn">Save Results</button>
                 </div>
             </section>
 
@@ -246,12 +241,12 @@
 
                 <div class="reports-grid">
                     <div class="card">
-                        <h3>📊 Attendance Report</h3>
+                        <h3>Attendance Report</h3>
                         <p>View detailed attendance records for your courses.</p>
                         <button class="btn-secondary">Generate Report</button>
                     </div>
                     <div class="card">
-                        <h3>📈 Performance Report</h3>
+                        <h3>Performance Report</h3>
                         <p>View student performance analytics and trends.</p>
                         <button class="btn-secondary">View Analytics</button>
                     </div>

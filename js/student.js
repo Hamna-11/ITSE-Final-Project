@@ -1,11 +1,10 @@
 // ==================== AUTHENTICATION CHECK ====================
 const loggedInUser = checkAuth();
 if (!loggedInUser || loggedInUser.role !== 'student') {
-    alert('⚠️ Access Denied! Student privileges required.');
+    alert('Access Denied! Student privileges required.');
     window.location.href = 'main.html';
 }
 
-// Display student name
 document.getElementById('userInfo').textContent = loggedInUser.fullName;
 document.getElementById('studentName').textContent = loggedInUser.fullName;
 
@@ -24,7 +23,28 @@ menuItems.forEach(item => {
     });
 });
 
-// Helper function to show section programmatically
+// Navigation buttons
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-navigate]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const sectionId = this.getAttribute('data-navigate');
+            showSection(sectionId);
+        });
+    });
+    
+    // Attendance course filter
+    const attendanceCourseFilter = document.getElementById('attendanceCourseFilter');
+    if (attendanceCourseFilter) {
+        attendanceCourseFilter.addEventListener('change', filterAttendanceLog);
+    }
+    
+    // Results course filter
+    const resultsCourseFilter = document.getElementById('resultsCourseFilter');
+    if (resultsCourseFilter) {
+        resultsCourseFilter.addEventListener('change', filterCourseResults);
+    }
+});
+
 function showSection(sectionId) {
     menuItems.forEach(mi => mi.classList.remove('active'));
     contentSections.forEach(cs => cs.classList.remove('active'));
@@ -38,7 +58,6 @@ function showSection(sectionId) {
 // ==================== GET STUDENT DATA ====================
 function getStudentData() {
     const students = JSON.parse(localStorage.getItem('students')) || [];
-    // Find student by username (assuming username matches part of name)
     return students.find(s => s.name === loggedInUser.fullName) || students[0];
 }
 
@@ -52,20 +71,16 @@ function loadOverviewStats() {
     const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
     const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
     
-    // Get student's courses
     const studentCourses = courses.filter(c => c.code === studentCourse);
     document.getElementById('totalCourses').textContent = studentCourses.length || 1;
     
-    // Calculate overall attendance
     const attendanceData = calculateOverallAttendance(attendanceRecords);
     document.getElementById('overallAttendance').textContent = attendanceData.percentage + '%';
     
-    // Show warning if attendance is low
     if (attendanceData.percentage < 75) {
         document.getElementById('attendanceAlert').style.display = 'block';
     }
     
-    // Calculate average grade
     const gradesData = calculateAverageGrade(resultsRecords);
     document.getElementById('averageGrade').textContent = gradesData.avgGrade || '-';
     document.getElementById('totalAssessments').textContent = gradesData.totalAssessments;
@@ -99,18 +114,15 @@ function calculateOverallAttendance(attendanceRecords) {
 function calculateAverageGrade(resultsRecords) {
     let totalPercentage = 0;
     let assessmentCount = 0;
-    let grades = [];
     
     resultsRecords.forEach(record => {
         const studentResult = record.students.find(s => s.rollNo === studentRollNo);
         if (studentResult && record.approved) {
             totalPercentage += parseFloat(studentResult.percentage);
             assessmentCount++;
-            grades.push(studentResult.grade);
         }
     });
     
-    // Calculate most common grade (mode)
     let avgGrade = '-';
     if (assessmentCount > 0) {
         const avgPercentage = totalPercentage / assessmentCount;
@@ -137,19 +149,14 @@ function loadAttendanceData() {
     const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     
-    // Overall summary
     const attendanceData = calculateOverallAttendance(attendanceRecords);
     document.getElementById('totalClasses').textContent = attendanceData.totalClasses;
     document.getElementById('classesAttended').textContent = attendanceData.presentCount;
     document.getElementById('attendancePercentage').textContent = attendanceData.percentage + '%';
     
-    // Course-wise attendance
     loadCourseWiseAttendance(attendanceRecords, courses);
-    
-    // Attendance log
     loadAttendanceLog(attendanceRecords, courses);
     
-    // Populate course filter
     const courseFilter = document.getElementById('attendanceCourseFilter');
     courseFilter.innerHTML = '<option value="">All Courses</option>';
     courses.forEach(course => {
@@ -160,7 +167,6 @@ function loadAttendanceData() {
 function loadCourseWiseAttendance(attendanceRecords, courses) {
     const tbody = document.getElementById('attendanceTableBody');
     
-    // Group attendance by course
     const courseAttendance = {};
     
     attendanceRecords.forEach(record => {
@@ -191,7 +197,7 @@ function loadCourseWiseAttendance(attendanceRecords, courses) {
     tbody.innerHTML = Object.entries(courseAttendance).map(([courseCode, data]) => {
         const course = courses.find(c => c.code === courseCode);
         const percentage = Math.round((data.present / data.total) * 100);
-        const status = percentage >= 75 ? 'Good ✅' : 'Low ⚠️';
+        const status = percentage >= 75 ? 'Good' : 'Low';
         const statusColor = percentage >= 75 ? '#16a34a' : '#dc2626';
         
         return `
@@ -211,7 +217,6 @@ function loadCourseWiseAttendance(attendanceRecords, courses) {
 function loadAttendanceLog(attendanceRecords, courses) {
     const tbody = document.getElementById('attendanceLogBody');
     
-    // Get student's attendance records
     const studentAttendance = [];
     
     attendanceRecords.forEach(record => {
@@ -227,7 +232,6 @@ function loadAttendanceLog(attendanceRecords, courses) {
         }
     });
     
-    // Sort by date (newest first)
     studentAttendance.sort((a, b) => new Date(b.date) - new Date(a.date));
     
     if (studentAttendance.length === 0) {
@@ -236,15 +240,13 @@ function loadAttendanceLog(attendanceRecords, courses) {
     }
     
     tbody.innerHTML = studentAttendance.map(record => {
-        const statusIcon = record.status === 'present' ? '✅' : 
-                          record.status === 'late' ? '⏰' : '❌';
         const statusText = record.status.charAt(0).toUpperCase() + record.status.slice(1);
         
         return `
             <tr>
                 <td>${new Date(record.date).toLocaleDateString()}</td>
                 <td>${record.courseCode} - ${record.courseName}</td>
-                <td>${statusIcon} ${statusText}</td>
+                <td>${statusText}</td>
             </tr>
         `;
     }).join('');
@@ -255,7 +257,6 @@ function filterAttendanceLog() {
     const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     
-    // Filter records
     let filteredRecords = attendanceRecords;
     if (selectedCourse) {
         filteredRecords = attendanceRecords.filter(r => r.courseCode === selectedCourse);
@@ -269,11 +270,9 @@ function loadResultsData() {
     const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     
-    // Performance summary
     const gradesData = calculateAverageGrade(resultsRecords);
     document.getElementById('summaryTotalAssessments').textContent = gradesData.totalAssessments;
     
-    // Calculate average percentage
     let totalPercentage = 0;
     let count = 0;
     resultsRecords.forEach(record => {
@@ -288,7 +287,6 @@ function loadResultsData() {
     document.getElementById('summaryAvgPercentage').textContent = avgPercentage + '%';
     document.getElementById('summaryAvgGrade').textContent = gradesData.avgGrade;
     
-    // Populate course filter
     const courseFilter = document.getElementById('resultsCourseFilter');
     const studentCourses = [...new Set(resultsRecords.map(r => r.courseCode))];
     courseFilter.innerHTML = '<option value="">-- Choose Course --</option>';
@@ -354,7 +352,6 @@ function loadMyCourses() {
     }
     
     tbody.innerHTML = studentCourses.map(course => {
-        // Calculate attendance for this course
         const courseAttendanceRecords = attendanceRecords.filter(r => r.courseCode === course.code);
         let present = 0, total = 0;
         
@@ -396,6 +393,6 @@ loadResultsData();
 loadMyCourses();
 loadProfile();
 
-console.log('✅ Student Dashboard loaded successfully');
-console.log('👤 Current User:', loggedInUser);
-console.log('📝 Student Data:', studentData);
+console.log('Student Dashboard loaded successfully');
+console.log('Current User:', loggedInUser);
+console.log('Student Data:', studentData);

@@ -1,3 +1,6 @@
+/* ==================== GOOGLE FONTS ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 /* ==================== RESET & BASE ==================== */
 * {
     margin: 0;
@@ -6,9 +9,11 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     height: 100vh;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ==================== MAIN CONTAINER ==================== */
@@ -19,7 +24,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 60px 40px;
+    padding: 40px 20px;
 }
 
 /* ==================== BACKGROUND IMAGE ==================== */
@@ -30,7 +35,6 @@ body {
     width: 100%;
     height: 100%;
     z-index: 1;
-    
     background-image: url('../assets/images/pic.jpg');
     background-size: cover;
     background-position: center;
@@ -44,44 +48,58 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.45);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.7) 100%);
     z-index: 1;
 }
 
-/* ==================== LOGIN BOX (WHITE + MORE TRANSPARENT) ==================== */
+/* ==================== LOGIN BOX ==================== */
 .left-section {
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: 520px;
+    max-width: 480px;
     max-height: 90vh;
     overflow-y: auto;
-    background: rgba(255, 255, 255, 0.75);   /* CHANGED - White + 25% transparent */
-    backdrop-filter: blur(20px);              /* INCREASED blur for glass effect */
-    -webkit-backdrop-filter: blur(20px);
-    padding: 45px 40px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
+    
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    
+    padding: 50px 45px;
+    
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 0, 0, 0.4),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 28px;
+    
+    animation: fadeInUp 0.8s ease;
 }
 
-/* Custom scrollbar */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scrollbar */
 .left-section::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
 }
 
 .left-section::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
+    background: transparent;
 }
 
 .left-section::-webkit-scrollbar-thumb {
-    background: rgba(30, 58, 138, 0.3);      /* CHANGED - Dark blue scrollbar */
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
-}
-
-.left-section::-webkit-scrollbar-thumb:hover {
-    background: rgba(30, 58, 138, 0.5);
 }
 
 /* ==================== LOGIN BOX CONTENT ==================== */
@@ -90,133 +108,145 @@ body {
 }
 
 .login-box h1 {
-    color: #1e3a8a;                          /* CHANGED - Dark blue text */
-    margin-bottom: 8px;
-    font-size: 34px;
+    color: #ffffff;
+    margin-bottom: 12px;
+    font-size: 32px;
     font-weight: 700;
     text-align: center;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
 }
 
 .subtitle {
-    color: #4b5563;                          /* CHANGED - Gray text */
-    margin-bottom: 32px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 38px;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.6;
     text-align: center;
+    font-weight: 400;
 }
 
 /* ==================== FORM STYLES ==================== */
 .form-group {
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
-    color: #2c3e50;                          /* Dark text */
-    font-weight: 600;
-    font-size: 14px;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.3px;
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 14px 16px;
-    border: 2px solid #e0e6ed;
-    border-radius: 6px;
+    padding: 16px 20px;
+    
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    
     font-size: 15px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.8);    /* CHANGED - Semi-transparent white */
-    color: #2c3e50;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .form-group input::placeholder {
-    color: #a0aec0;
+    color: rgba(255, 255, 255, 0.45);
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #1e3a8a;                   /* CHANGED - Dark blue focus */
-    background: white;
-    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 
+        0 0 0 4px rgba(255, 255, 255, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
 }
 
 .form-group select {
-    color: #2c3e50;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    padding-right: 45px;
 }
 
 .form-group select option {
-    background: white;
-    color: #2c3e50;
+    background: rgba(30, 58, 138, 0.95);
+    color: #ffffff;
+    padding: 12px;
 }
 
-/* ==================== BUTTON STYLES (DARK BLUE) ==================== */
+/* ==================== BUTTON STYLES ==================== */
 .btn-login {
     width: 100%;
-    padding: 16px;
-    background: #1e3a8a;                     /* CHANGED - Solid dark blue */
-    color: #ffffff;
+    padding: 18px;
+    
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e3a8a;
+    
     border: none;
-    border-radius: 6px;
+    border-radius: 14px;
+    
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 15px;
+    
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.2px;
+    
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .btn-login:hover {
-    background: #1e40af;                     /* CHANGED - Slightly lighter blue on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+    background: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3);
 }
 
 .btn-login:active {
-    transform: translateY(0);
-    background: #1e3a8a;
+    transform: translateY(-1px);
 }
 
-/* ==================== RESPONSIVE DESIGN ==================== */
-@media (max-width: 1200px) {
-    .main-container {
-        padding: 50px 30px;
-    }
-    
-    .left-section {
-        max-width: 480px;
-    }
-}
-
-@media (max-width: 968px) {
-    .main-container {
-        padding: 40px 30px;
-    }
-    
-    .left-section {
-        max-width: 450px;
-        padding: 40px 35px;
-    }
-}
-
-@media (max-width: 576px) {
-    .main-container {
-        padding: 30px 20px;
-    }
-    
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
     .left-section {
         max-width: 100%;
-        padding: 35px 28px;
-        border-radius: 10px;
+        padding: 40px 30px;
+        border-radius: 24px;
     }
     
     .login-box h1 {
         font-size: 28px;
     }
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 20px 15px;
+    }
     
-    .subtitle {
-        font-size: 13px;
+    .left-section {
+        padding: 35px 25px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 14px 18px;
     }
 }

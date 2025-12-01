@@ -11,11 +11,11 @@
     <nav class="navbar">
         <div class="navbar-content">
             <div class="navbar-left">
-                <h2>🎓 Student Portal</h2>
+                <h2>Student Portal</h2>
             </div>
             <div class="navbar-right">
                 <span class="user-info" id="userInfo">Student</span>
-                <button class="btn-logout" onclick="logout()">Logout</button>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
             </div>
         </div>
     </nav>
@@ -29,23 +29,18 @@
             </div>
             <ul class="sidebar-menu">
                 <li class="menu-item active" data-section="overview">
-                    <span class="menu-icon">📊</span>
                     <span>Dashboard</span>
                 </li>
                 <li class="menu-item" data-section="attendance">
-                    <span class="menu-icon">📝</span>
                     <span>My Attendance</span>
                 </li>
                 <li class="menu-item" data-section="results">
-                    <span class="menu-icon">📊</span>
                     <span>My Results</span>
                 </li>
                 <li class="menu-item" data-section="courses">
-                    <span class="menu-icon">📚</span>
                     <span>My Courses</span>
                 </li>
                 <li class="menu-item" data-section="profile">
-                    <span class="menu-icon">👤</span>
                     <span>My Profile</span>
                 </li>
             </ul>
@@ -65,28 +60,28 @@
                 <!-- Statistics Cards -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon blue">📚</div>
+                        <div class="stat-icon blue"></div>
                         <div class="stat-info">
                             <h3 id="totalCourses">0</h3>
                             <p>Enrolled Courses</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon green">✅</div>
+                        <div class="stat-icon green"></div>
                         <div class="stat-info">
                             <h3 id="overallAttendance">0%</h3>
                             <p>Overall Attendance</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon orange">📊</div>
+                        <div class="stat-icon orange"></div>
                         <div class="stat-info">
                             <h3 id="averageGrade">-</h3>
                             <p>Average Grade</p>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon purple">🏆</div>
+                        <div class="stat-icon purple"></div>
                         <div class="stat-info">
                             <h3 id="totalAssessments">0</h3>
                             <p>Assessments</p>
@@ -96,7 +91,7 @@
 
                 <!-- Attendance Alert -->
                 <div class="card" id="attendanceAlert" style="display: none; border-left: 4px solid #dc2626; background: #fee2e2;">
-                    <h3 style="color: #991b1b;">⚠️ Attendance Warning</h3>
+                    <h3 style="color: #991b1b;">Attendance Warning</h3>
                     <p style="color: #7f1d1d;">Your attendance is below 75%. Please attend classes regularly to meet the minimum requirement.</p>
                 </div>
 
@@ -105,14 +100,14 @@
                     <h2>Quick Overview</h2>
                     <div class="reports-grid">
                         <div class="card">
-                            <h3>📝 Attendance Status</h3>
+                            <h3>Attendance Status</h3>
                             <p>Check your attendance percentage for all courses.</p>
-                            <button class="btn-primary" onclick="showSection('attendance')">View Attendance</button>
+                            <button class="btn-primary" data-navigate="attendance">View Attendance</button>
                         </div>
                         <div class="card">
-                            <h3>📊 Academic Performance</h3>
+                            <h3>Academic Performance</h3>
                             <p>View your marks, grades, and performance reports.</p>
-                            <button class="btn-primary" onclick="showSection('results')">View Results</button>
+                            <button class="btn-primary" data-navigate="results">View Results</button>
                         </div>
                     </div>
                 </div>
@@ -174,7 +169,7 @@
                     <h2>Attendance Log</h2>
                     <div class="form-group">
                         <label>Filter by Course:</label>
-                        <select id="attendanceCourseFilter" onchange="filterAttendanceLog()">
+                        <select id="attendanceCourseFilter">
                             <option value="">All Courses</option>
                         </select>
                     </div>
@@ -228,7 +223,7 @@
                     <h2>Course-wise Results</h2>
                     <div class="form-group">
                         <label>Select Course:</label>
-                        <select id="resultsCourseFilter" onchange="filterCourseResults()">
+                        <select id="resultsCourseFilter">
                             <option value="">-- Choose Course --</option>
                         </select>
                     </div>
