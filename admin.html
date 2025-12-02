@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Student Portal</title>
     <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/modal.css">
 </head>
 <body>
-    <!-- Top Navigation Bar -->
     <nav class="navbar">
         <div class="navbar-content">
             <div class="navbar-left">
@@ -20,9 +20,7 @@
         </div>
     </nav>
 
-    <!-- Main Dashboard Container -->
     <div class="dashboard-container">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h3>Admin Panel</h3>
@@ -37,57 +35,41 @@
                 <li class="menu-item" data-section="courses">
                     <span>Course Management</span>
                 </li>
+                <li class="menu-item" data-section="students">
+                    <span>Student Enrollment</span>
+                </li>
                 <li class="menu-item" data-section="reports">
                     <span>Reports & Analytics</span>
-                </li>
-                <li class="menu-item" data-section="settings">
-                    <span>System Settings</span>
                 </li>
             </ul>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Overview Section -->
             <section class="content-section active" id="overview">
                 <div class="page-header">
                     <h1>Dashboard Overview</h1>
                     <p>Welcome back, Administrator</p>
                 </div>
 
-                <!-- Statistics Cards -->
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"></div>
-                        <div class="stat-info">
-                            <h3 id="totalUsers">0</h3>
-                            <p>Total Users</p>
-                        </div>
+                    <div class="card">
+                        <h3>Total Users</h3>
+                        <p id="totalUsers" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"></div>
-                        <div class="stat-info">
-                            <h3 id="totalTeachers">0</h3>
-                            <p>Teachers</p>
-                        </div>
+                    <div class="card">
+                        <h3>Teachers</h3>
+                        <p id="totalTeachers" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon orange"></div>
-                        <div class="stat-info">
-                            <h3 id="totalStudents">0</h3>
-                            <p>Students</p>
-                        </div>
+                    <div class="card">
+                        <h3>Students</h3>
+                        <p id="totalStudents" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon purple"></div>
-                        <div class="stat-info">
-                            <h3 id="totalCourses">0</h3>
-                            <p>Active Courses</p>
-                        </div>
+                    <div class="card">
+                        <h3>Active Courses</h3>
+                        <p id="totalCourses" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
                 <div class="card">
                     <h2>Recent System Activity</h2>
                     <div class="activity-list" id="activityList">
@@ -96,11 +78,10 @@
                 </div>
             </section>
 
-            <!-- User Management Section -->
             <section class="content-section" id="users">
                 <div class="page-header">
                     <h1>User Management</h1>
-                    <button class="btn-primary" id="addUserBtn">+ Add New User</button>
+                    <button class="btn-primary" id="addUserBtn">Add New User</button>
                 </div>
 
                 <div class="card">
@@ -126,11 +107,10 @@
                 </div>
             </section>
 
-            <!-- Course Management Section -->
             <section class="content-section" id="courses">
                 <div class="page-header">
                     <h1>Course Management</h1>
-                    <button class="btn-primary" id="addCourseBtn">+ Add New Course</button>
+                    <button class="btn-primary" id="addCourseBtn">Add New Course</button>
                 </div>
 
                 <div class="card">
@@ -155,7 +135,34 @@
                 </div>
             </section>
 
-            <!-- Reports Section -->
+            <section class="content-section" id="students">
+                <div class="page-header">
+                    <h1>Student Enrollment</h1>
+                    <button class="btn-primary" id="enrollStudentBtn">Enroll Student</button>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Roll No</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Enrolled Course</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <tr>
+                                    <td colspan="5" class="no-data">No students found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             <section class="content-section" id="reports">
                 <div class="page-header">
                     <h1>Reports & Analytics</h1>
@@ -165,66 +172,121 @@
                     <div class="card">
                         <h3>Attendance Reports</h3>
                         <p>Generate attendance reports by class, course, or date range.</p>
-                        <button class="btn-secondary">Generate Report</button>
+                        <button class="btn-secondary" id="generateAttendanceReport">Generate Report</button>
                     </div>
                     <div class="card">
                         <h3>Performance Analytics</h3>
                         <p>View student performance trends and statistics.</p>
-                        <button class="btn-secondary">View Analytics</button>
+                        <button class="btn-secondary" id="viewAnalytics">View Analytics</button>
                     </div>
                     <div class="card">
                         <h3>Result Summary</h3>
                         <p>Download complete result sheets and grade reports.</p>
-                        <button class="btn-secondary">Download Reports</button>
+                        <button class="btn-secondary" id="downloadReports">Download PDF</button>
                     </div>
                 </div>
-            </section>
 
-            <!-- Settings Section -->
-            <section class="content-section" id="settings">
-                <div class="page-header">
-                    <h1>System Settings</h1>
-                </div>
-
-                <div class="card">
-                    <h3>Grading Criteria</h3>
-                    <form id="gradingForm">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>A Grade (90-100%)</label>
-                                <input type="number" value="90" min="0" max="100">
-                            </div>
-                            <div class="form-group">
-                                <label>B Grade (80-89%)</label>
-                                <input type="number" value="80" min="0" max="100">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>C Grade (70-79%)</label>
-                                <input type="number" value="70" min="0" max="100">
-                            </div>
-                            <div class="form-group">
-                                <label>D Grade (60-69%)</label>
-                                <input type="number" value="60" min="0" max="100">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-primary">Save Settings</button>
-                    </form>
-                </div>
-
-                <div class="card">
-                    <h3>Attendance Threshold</h3>
-                    <div class="form-group">
-                        <label>Minimum Attendance Required (%)</label>
-                        <input type="number" value="75" min="0" max="100">
-                    </div>
-                    <button class="btn-primary">Update Threshold</button>
+                <div class="card" id="analyticsDisplay" style="display: none;">
+                    <h2>Performance Analytics</h2>
+                    <div id="analyticsContent"></div>
                 </div>
             </section>
         </main>
     </div>
 
+    <div class="modal" id="addUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <span class="close" id="closeUserModal">&times;</span>
+            </div>
+            <form id="addUserForm">
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="userName" required placeholder="Enter full name">
+                </div>
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="userUsername" required placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="userPassword" required placeholder="Enter password">
+                </div>
+                <div class="form-group">
+                    <label>Role:</label>
+                    <select id="userRole" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Admin</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelUserBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addCourseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Course</h2>
+                <span class="close" id="closeCourseModal">&times;</span>
+            </div>
+            <form id="addCourseForm">
+                <div class="form-group">
+                    <label>Course Code:</label>
+                    <input type="text" id="courseCode" required placeholder="e.g., CS101">
+                </div>
+                <div class="form-group">
+                    <label>Course Name:</label>
+                    <input type="text" id="courseName" required placeholder="Enter course name">
+                </div>
+                <div class="form-group">
+                    <label>Assign Teacher:</label>
+                    <select id="courseTeacher" required>
+                        <option value="">Select Teacher</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelCourseBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="enrollStudentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Enroll Student in Course</h2>
+                <span class="close" id="closeEnrollModal">&times;</span>
+            </div>
+            <form id="enrollStudentForm">
+                <div class="form-group">
+                    <label>Select Student:</label>
+                    <select id="enrollStudent" required>
+                        <option value="">Select Student</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select Course:</label>
+                    <select id="enrollCourse" required>
+                        <option value="">Select Course</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelEnrollBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Enroll Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="./js/storage.js"></script>
     <script src="./js/auth.js"></script>
     <script src="./js/admin.js"></script>

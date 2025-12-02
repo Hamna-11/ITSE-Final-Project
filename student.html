@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 <body>
-    <!-- Top Navigation Bar -->
     <nav class="navbar">
         <div class="navbar-content">
             <div class="navbar-left">
@@ -20,9 +19,7 @@
         </div>
     </nav>
 
-    <!-- Main Dashboard Container -->
     <div class="dashboard-container">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h3>Student Panel</h3>
@@ -46,9 +43,7 @@
             </ul>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Overview Section -->
             <section class="content-section active" id="overview">
                 <div class="page-header">
                     <div>
@@ -57,45 +52,30 @@
                     </div>
                 </div>
 
-                <!-- Statistics Cards -->
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"></div>
-                        <div class="stat-info">
-                            <h3 id="totalCourses">0</h3>
-                            <p>Enrolled Courses</p>
-                        </div>
+                    <div class="card">
+                        <h3>Enrolled Courses</h3>
+                        <p id="totalCourses" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"></div>
-                        <div class="stat-info">
-                            <h3 id="overallAttendance">0%</h3>
-                            <p>Overall Attendance</p>
-                        </div>
+                    <div class="card">
+                        <h3>Overall Attendance</h3>
+                        <p id="overallAttendance" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0%</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon orange"></div>
-                        <div class="stat-info">
-                            <h3 id="averageGrade">-</h3>
-                            <p>Average Grade</p>
-                        </div>
+                    <div class="card">
+                        <h3>Average Grade</h3>
+                        <p id="averageGrade" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">-</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon purple"></div>
-                        <div class="stat-info">
-                            <h3 id="totalAssessments">0</h3>
-                            <p>Assessments</p>
-                        </div>
+                    <div class="card">
+                        <h3>Assessments</h3>
+                        <p id="totalAssessments" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
                 </div>
 
-                <!-- Attendance Alert -->
-                <div class="card" id="attendanceAlert" style="display: none; border-left: 4px solid #dc2626; background: #fee2e2;">
+                <div class="card" id="attendanceAlert" style="display: none; border-left: 4px solid #dc2626; background: rgba(220, 38, 38, 0.1);">
                     <h3 style="color: #991b1b;">Attendance Warning</h3>
                     <p style="color: #7f1d1d;">Your attendance is below 75%. Please attend classes regularly to meet the minimum requirement.</p>
                 </div>
 
-                <!-- Quick Overview -->
                 <div class="card">
                     <h2>Quick Overview</h2>
                     <div class="reports-grid">
@@ -113,33 +93,30 @@
                 </div>
             </section>
 
-            <!-- My Attendance Section -->
             <section class="content-section" id="attendance">
                 <div class="page-header">
                     <h1>My Attendance</h1>
                     <p>View your attendance records for all courses</p>
                 </div>
 
-                <!-- Overall Attendance Card -->
                 <div class="card">
                     <h2>Overall Attendance Summary</h2>
-                    <div class="attendance-summary">
-                        <div class="summary-item">
-                            <div class="summary-label">Total Classes:</div>
-                            <div class="summary-value" id="totalClasses">0</div>
+                    <div class="reports-grid">
+                        <div class="card">
+                            <h3>Total Classes</h3>
+                            <p id="totalClasses" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                         </div>
-                        <div class="summary-item">
-                            <div class="summary-label">Classes Attended:</div>
-                            <div class="summary-value" id="classesAttended">0</div>
+                        <div class="card">
+                            <h3>Classes Attended</h3>
+                            <p id="classesAttended" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                         </div>
-                        <div class="summary-item">
-                            <div class="summary-label">Attendance Percentage:</div>
-                            <div class="summary-value" id="attendancePercentage">0%</div>
+                        <div class="card">
+                            <h3>Attendance Percentage</h3>
+                            <p id="attendancePercentage" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0%</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Course-wise Attendance -->
                 <div class="card">
                     <h2>Course-wise Attendance</h2>
                     <div class="table-container">
@@ -164,7 +141,6 @@
                     </div>
                 </div>
 
-                <!-- Detailed Attendance Log -->
                 <div class="card">
                     <h2>Attendance Log</h2>
                     <div class="form-group">
@@ -192,39 +168,36 @@
                 </div>
             </section>
 
-            <!-- My Results Section -->
             <section class="content-section" id="results">
                 <div class="page-header">
                     <h1>My Results</h1>
                     <p>View your academic performance and grades</p>
                 </div>
 
-                <!-- Performance Summary -->
                 <div class="card">
                     <h2>Performance Summary</h2>
-                    <div class="attendance-summary">
-                        <div class="summary-item">
-                            <div class="summary-label">Total Assessments:</div>
-                            <div class="summary-value" id="summaryTotalAssessments">0</div>
+                    <div class="reports-grid">
+                        <div class="card">
+                            <h3>Total Assessments</h3>
+                            <p id="summaryTotalAssessments" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                         </div>
-                        <div class="summary-item">
-                            <div class="summary-label">Average Percentage:</div>
-                            <div class="summary-value" id="summaryAvgPercentage">0%</div>
+                        <div class="card">
+                            <h3>Average Percentage</h3>
+                            <p id="summaryAvgPercentage" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0%</p>
                         </div>
-                        <div class="summary-item">
-                            <div class="summary-label">Average Grade:</div>
-                            <div class="summary-value" id="summaryAvgGrade">-</div>
+                        <div class="card">
+                            <h3>Average Grade</h3>
+                            <p id="summaryAvgGrade" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">-</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Course-wise Results -->
                 <div class="card">
                     <h2>Course-wise Results</h2>
                     <div class="form-group">
                         <label>Select Course:</label>
                         <select id="resultsCourseFilter">
-                            <option value="">-- Choose Course --</option>
+                            <option value="">Choose Course</option>
                         </select>
                     </div>
                     <div class="table-container">
@@ -249,7 +222,6 @@
                 </div>
             </section>
 
-            <!-- My Courses Section -->
             <section class="content-section" id="courses">
                 <div class="page-header">
                     <h1>My Courses</h1>
@@ -276,7 +248,6 @@
                 </div>
             </section>
 
-            <!-- My Profile Section -->
             <section class="content-section" id="profile">
                 <div class="page-header">
                     <h1>My Profile</h1>
