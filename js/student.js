@@ -44,7 +44,7 @@ function showSection(sectionId) {
     menuItems.forEach(mi => mi.classList.remove('active'));
     contentSections.forEach(cs => cs.classList.remove('active'));
     
-    const menuItem = document.querySelector([data-section="${sectionId}"]);
+    const menuItem = document.querySelector(`[data-section ="${sectionId}"]`);
     if (menuItem) menuItem.classList.add('active');
     
     document.getElementById(sectionId).classList.add('active');

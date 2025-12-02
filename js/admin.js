@@ -475,7 +475,7 @@ document.getElementById('downloadReports').addEventListener('click', function() 
     doc.text('Student Portal - System Report', 20, 20);
     
     doc.setFontSize(12);
-    doc.text(Generated on: ${new Date().toLocaleString()}, 20, 30);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, 30);
     
     const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
@@ -486,12 +486,12 @@ document.getElementById('downloadReports').addEventListener('click', function() 
     doc.text('System Statistics:', 20, 45);
     
     doc.setFontSize(12);
-    doc.text(Total Users: ${users.length}, 20, 55);
-    doc.text(Total Teachers: ${users.filter(u => u.role === 'teacher').length}, 20, 62);
-    doc.text(Total Students: ${users.filter(u => u.role === 'student').length}, 20, 69);
-    doc.text(Total Courses: ${courses.length}, 20, 76);
-    doc.text(Total Assessments: ${resultsRecords.length}, 20, 83);
-    doc.text(Total Attendance Records: ${attendanceRecords.length}, 20, 90);
+    doc.text(`Total Users: ${users.length}`, 20, 55);
+    doc.text(`Total Teachers: ${users.filter(u => u.role === 'teacher').length}`, 20, 62);
+    doc.text(`Total Students: ${users.filter(u => u.role === 'student').length}`, 20, 69);
+    doc.text(`Total Courses: ${courses.length}`, 20, 76);
+    doc.text(`Total Assessments: ${resultsRecords.length}`, 20, 83);
+    doc.text(`Total Attendance Records: ${attendanceRecords.length}`, 20, 90);
     
     doc.save('system-report.pdf');
     alert('Report downloaded successfully!');
@@ -514,12 +514,12 @@ document.getElementById('generateAttendanceReport').addEventListener('click', fu
         }
         
         doc.setFontSize(14);
-        doc.text(${record.courseCode} - ${record.date}, 20, y);
+        doc.text(`${record.courseCode} - ${record.date}`, 20, y);
         y += 7;
         
         doc.setFontSize(10);
         record.students.forEach(student => {
-            doc.text(${student.rollNo}: ${student.status}, 25, y);
+            doc.text(`${student.rollNo}: ${student.status}`, 25, y);
             y += 6;
         });
         y += 5;
