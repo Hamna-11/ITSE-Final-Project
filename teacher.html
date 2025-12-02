@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 <body>
-    <!-- Top Navigation Bar -->
     <nav class="navbar">
         <div class="navbar-content">
             <div class="navbar-left">
@@ -20,9 +19,7 @@
         </div>
     </nav>
 
-    <!-- Main Dashboard Container -->
     <div class="dashboard-container">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h3>Teacher Panel</h3>
@@ -40,15 +37,10 @@
                 <li class="menu-item" data-section="mycourses">
                     <span>My Courses</span>
                 </li>
-                <li class="menu-item" data-section="reports">
-                    <span>View Reports</span>
-                </li>
             </ul>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Overview Section -->
             <section class="content-section active" id="overview">
                 <div class="page-header">
                     <div>
@@ -57,39 +49,25 @@
                     </div>
                 </div>
 
-                <!-- Statistics Cards -->
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"></div>
-                        <div class="stat-info">
-                            <h3 id="totalCourses">0</h3>
-                            <p>My Courses</p>
-                        </div>
+                    <div class="card">
+                        <h3>My Courses</h3>
+                        <p id="totalCourses" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"></div>
-                        <div class="stat-info">
-                            <h3 id="totalStudents">0</h3>
-                            <p>Total Students</p>
-                        </div>
+                    <div class="card">
+                        <h3>Total Students</h3>
+                        <p id="totalStudents" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon orange"></div>
-                        <div class="stat-info">
-                            <h3 id="attendanceMarked">0</h3>
-                            <p>Attendance Marked</p>
-                        </div>
+                    <div class="card">
+                        <h3>Attendance Marked</h3>
+                        <p id="attendanceMarked" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon purple"></div>
-                        <div class="stat-info">
-                            <h3 id="resultsUploaded">0</h3>
-                            <p>Results Uploaded</p>
-                        </div>
+                    <div class="card">
+                        <h3>Results Uploaded</h3>
+                        <p id="resultsUploaded" style="font-size: 48px; font-weight: 800; color: #3c5166; margin-top: 20px;">0</p>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
                 <div class="card">
                     <h2>Quick Actions</h2>
                     <div class="reports-grid">
@@ -107,7 +85,6 @@
                 </div>
             </section>
 
-            <!-- Mark Attendance Section -->
             <section class="content-section" id="attendance">
                 <div class="page-header">
                     <h1>Mark Attendance</h1>
@@ -120,7 +97,7 @@
                             <div class="form-group">
                                 <label>Select Course:</label>
                                 <select id="courseSelect" required>
-                                    <option value="">-- Choose Course --</option>
+                                    <option value="">Choose Course</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -151,7 +128,6 @@
                 </div>
             </section>
 
-            <!-- Upload Results Section -->
             <section class="content-section" id="results">
                 <div class="page-header">
                     <h1>Upload Results</h1>
@@ -164,13 +140,13 @@
                             <div class="form-group">
                                 <label>Select Course:</label>
                                 <select id="resultsCourseSelect" required>
-                                    <option value="">-- Choose Course --</option>
+                                    <option value="">Choose Course</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Assessment Type:</label>
                                 <select id="assessmentType" required>
-                                    <option value="">-- Choose Type --</option>
+                                    <option value="">Choose Type</option>
                                     <option value="midterm">Mid Term</option>
                                     <option value="final">Final Exam</option>
                                     <option value="assignment">Assignment</option>
@@ -206,7 +182,6 @@
                 </div>
             </section>
 
-            <!-- My Courses Section -->
             <section class="content-section" id="mycourses">
                 <div class="page-header">
                     <h1>My Courses</h1>
@@ -229,26 +204,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Reports Section -->
-            <section class="content-section" id="reports">
-                <div class="page-header">
-                    <h1>View Reports</h1>
-                </div>
-
-                <div class="reports-grid">
-                    <div class="card">
-                        <h3>Attendance Report</h3>
-                        <p>View detailed attendance records for your courses.</p>
-                        <button class="btn-secondary">Generate Report</button>
-                    </div>
-                    <div class="card">
-                        <h3>Performance Report</h3>
-                        <p>View student performance analytics and trends.</p>
-                        <button class="btn-secondary">View Analytics</button>
                     </div>
                 </div>
             </section>
