@@ -1,4 +1,3 @@
-// ==================== AUTHENTICATION CHECK ====================
 const loggedInUser = checkAuth();
 if (!loggedInUser || loggedInUser.role !== 'student') {
     alert('Access Denied! Student privileges required.');
@@ -8,7 +7,6 @@ if (!loggedInUser || loggedInUser.role !== 'student') {
 document.getElementById('userInfo').textContent = loggedInUser.fullName;
 document.getElementById('studentName').textContent = loggedInUser.fullName;
 
-// ==================== SIDEBAR NAVIGATION ====================
 const menuItems = document.querySelectorAll('.menu-item');
 const contentSections = document.querySelectorAll('.content-section');
 
@@ -23,7 +21,6 @@ menuItems.forEach(item => {
     });
 });
 
-// Navigation buttons
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-navigate]').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -32,13 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Attendance course filter
     const attendanceCourseFilter = document.getElementById('attendanceCourseFilter');
     if (attendanceCourseFilter) {
         attendanceCourseFilter.addEventListener('change', filterAttendanceLog);
     }
     
-    // Results course filter
     const resultsCourseFilter = document.getElementById('resultsCourseFilter');
     if (resultsCourseFilter) {
         resultsCourseFilter.addEventListener('change', filterCourseResults);
@@ -49,13 +44,12 @@ function showSection(sectionId) {
     menuItems.forEach(mi => mi.classList.remove('active'));
     contentSections.forEach(cs => cs.classList.remove('active'));
     
-    const menuItem = document.querySelector(`[data-section="${sectionId}"]`);
+    const menuItem = document.querySelector([data-section="${sectionId}"]);
     if (menuItem) menuItem.classList.add('active');
     
     document.getElementById(sectionId).classList.add('active');
 }
 
-// ==================== GET STUDENT DATA ====================
 function getStudentData() {
     const students = JSON.parse(localStorage.getItem('students')) || [];
     return students.find(s => s.name === loggedInUser.fullName) || students[0];
@@ -65,7 +59,6 @@ const studentData = getStudentData();
 const studentRollNo = studentData ? studentData.rollNo : '2024-001';
 const studentCourse = studentData ? studentData.course : 'CS101';
 
-// ==================== LOAD OVERVIEW STATISTICS ====================
 function loadOverviewStats() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
@@ -86,7 +79,6 @@ function loadOverviewStats() {
     document.getElementById('totalAssessments').textContent = gradesData.totalAssessments;
 }
 
-// ==================== CALCULATE OVERALL ATTENDANCE ====================
 function calculateOverallAttendance(attendanceRecords) {
     let totalClasses = 0;
     let presentCount = 0;
@@ -110,7 +102,6 @@ function calculateOverallAttendance(attendanceRecords) {
     };
 }
 
-// ==================== CALCULATE AVERAGE GRADE ====================
 function calculateAverageGrade(resultsRecords) {
     let totalPercentage = 0;
     let assessmentCount = 0;
@@ -144,7 +135,6 @@ function calculateAverageGrade(resultsRecords) {
     };
 }
 
-// ==================== LOAD ATTENDANCE DATA ====================
 function loadAttendanceData() {
     const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
@@ -158,10 +148,12 @@ function loadAttendanceData() {
     loadAttendanceLog(attendanceRecords, courses);
     
     const courseFilter = document.getElementById('attendanceCourseFilter');
-    courseFilter.innerHTML = '<option value="">All Courses</option>';
-    courses.forEach(course => {
-        courseFilter.innerHTML += `<option value="${course.code}">${course.code} - ${course.name}</option>`;
-    });
+    if (courseFilter) {
+        courseFilter.innerHTML = '<option value="">All Courses</option>';
+        courses.forEach(course => {
+            courseFilter.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+        });
+    }
 }
 
 function loadCourseWiseAttendance(attendanceRecords, courses) {
@@ -265,7 +257,6 @@ function filterAttendanceLog() {
     loadAttendanceLog(filteredRecords, courses);
 }
 
-// ==================== LOAD RESULTS DATA ====================
 function loadResultsData() {
     const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
@@ -288,14 +279,16 @@ function loadResultsData() {
     document.getElementById('summaryAvgGrade').textContent = gradesData.avgGrade;
     
     const courseFilter = document.getElementById('resultsCourseFilter');
-    const studentCourses = [...new Set(resultsRecords.map(r => r.courseCode))];
-    courseFilter.innerHTML = '<option value="">-- Choose Course --</option>';
-    studentCourses.forEach(courseCode => {
-        const course = courses.find(c => c.code === courseCode);
-        if (course) {
-            courseFilter.innerHTML += `<option value="${courseCode}">${courseCode} - ${course.name}</option>`;
-        }
-    });
+    if (courseFilter) {
+        const studentCourses = [...new Set(resultsRecords.map(r => r.courseCode))];
+        courseFilter.innerHTML = '<option value="">Choose Course</option>';
+        studentCourses.forEach(courseCode => {
+            const course = courses.find(c => c.code === courseCode);
+            if (course) {
+                courseFilter.innerHTML += <option value="${courseCode}">${courseCode} - ${course.name}</option>;
+            }
+        });
+    }
 }
 
 function filterCourseResults() {
@@ -338,7 +331,6 @@ function filterCourseResults() {
     }).join('');
 }
 
-// ==================== LOAD MY COURSES ====================
 function loadMyCourses() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
@@ -378,7 +370,6 @@ function loadMyCourses() {
     }).join('');
 }
 
-// ==================== LOAD PROFILE ====================
 function loadProfile() {
     document.getElementById('profileName').textContent = loggedInUser.fullName;
     document.getElementById('profileRoll').textContent = studentRollNo;
@@ -386,13 +377,8 @@ function loadProfile() {
     document.getElementById('profileCourse').textContent = studentCourse;
 }
 
-// ==================== INITIALIZATION ====================
 loadOverviewStats();
 loadAttendanceData();
 loadResultsData();
 loadMyCourses();
 loadProfile();
-
-console.log('Student Dashboard loaded successfully');
-console.log('Current User:', loggedInUser);
-console.log('Student Data:', studentData);

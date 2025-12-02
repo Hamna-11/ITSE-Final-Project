@@ -1,4 +1,3 @@
-// ==================== AUTHENTICATION CHECK ====================
 const loggedInUser = checkAuth();
 if (!loggedInUser || loggedInUser.role !== 'admin') {
     alert('Access Denied! Admin privileges required.');
@@ -7,7 +6,6 @@ if (!loggedInUser || loggedInUser.role !== 'admin') {
 
 document.getElementById('userInfo').textContent = loggedInUser.fullName;
 
-// ==================== SIDEBAR NAVIGATION ====================
 const menuItems = document.querySelectorAll('.menu-item');
 const contentSections = document.querySelectorAll('.content-section');
 
@@ -23,38 +21,203 @@ menuItems.forEach(item => {
     });
 });
 
-// ==================== INITIALIZE SAMPLE DATA ====================
-function initializeSampleData() {
-    if (!localStorage.getItem('systemUsers')) {
-        const sampleUsers = [
-            { id: 1, name: 'John Teacher', username: 'teacher', role: 'teacher', status: 'active' },
-            { id: 2, name: 'Jane Student', username: 'student', role: 'student', status: 'active' },
-            { id: 3, name: 'Alice Johnson', username: 'alice', role: 'student', status: 'active' },
-            { id: 4, name: 'Bob Smith', username: 'bob', role: 'teacher', status: 'active' }
-        ];
-        localStorage.setItem('systemUsers', JSON.stringify(sampleUsers));
-    }
-    
-    if (!localStorage.getItem('courses')) {
-        const sampleCourses = [
-            { code: 'CS101', name: 'Introduction to Programming', teacher: 'John Teacher', students: 25 },
-            { code: 'CS202', name: 'Data Structures', teacher: 'Bob Smith', students: 30 },
-            { code: 'SE301', name: 'Software Engineering', teacher: 'John Teacher', students: 20 }
-        ];
-        localStorage.setItem('courses', JSON.stringify(sampleCourses));
-    }
-    
-    if (!localStorage.getItem('systemActivity')) {
-        const sampleActivity = [
-            { action: 'User Login', user: 'John Teacher', time: new Date().toLocaleString() },
-            { action: 'Attendance Marked', user: 'Bob Smith', time: new Date().toLocaleString() },
-            { action: 'Results Updated', user: 'John Teacher', time: new Date().toLocaleString() }
-        ];
-        localStorage.setItem('systemActivity', JSON.stringify(sampleActivity));
-    }
+const addUserModal = document.getElementById('addUserModal');
+const addCourseModal = document.getElementById('addCourseModal');
+const enrollStudentModal = document.getElementById('enrollStudentModal');
+
+function openModal(modal) {
+    modal.classList.add('show');
 }
 
-// ==================== LOAD OVERVIEW STATISTICS ====================
+function closeModal(modal) {
+    modal.classList.remove('show');
+}
+
+document.getElementById('addUserBtn').addEventListener('click', () => openModal(addUserModal));
+document.getElementById('closeUserModal').addEventListener('click', () => closeModal(addUserModal));
+document.getElementById('cancelUserBtn').addEventListener('click', () => closeModal(addUserModal));
+
+window.addEventListener('click', (e) => {
+    if (e.target === addUserModal) closeModal(addUserModal);
+    if (e.target === addCourseModal) closeModal(addCourseModal);
+    if (e.target === enrollStudentModal) closeModal(enrollStudentModal);
+});
+
+document.getElementById('addCourseBtn').addEventListener('click', () => {
+    loadTeachersList();
+    openModal(addCourseModal);
+});
+document.getElementById('closeCourseModal').addEventListener('click', () => closeModal(addCourseModal));
+document.getElementById('cancelCourseBtn').addEventListener('click', () => closeModal(addCourseModal));
+
+document.getElementById('enrollStudentBtn').addEventListener('click', () => {
+    loadCoursesForEnrollment();
+    loadStudentsForEnrollment();
+    openModal(enrollStudentModal);
+});
+document.getElementById('closeEnrollModal').addEventListener('click', () => closeModal(enrollStudentModal));
+document.getElementById('cancelEnrollBtn').addEventListener('click', () => closeModal(enrollStudentModal));
+
+function loadTeachersList() {
+    const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
+    const teachers = users.filter(u => u.role === 'teacher');
+    const select = document.getElementById('courseTeacher');
+    
+    select.innerHTML = '<option value="">Select Teacher</option>';
+    teachers.forEach(teacher => {
+        select.innerHTML += <option value="${teacher.name}">${teacher.name}</option>;
+    });
+}
+
+function loadCoursesForEnrollment() {
+    const courses = JSON.parse(localStorage.getItem('courses')) || [];
+    const select = document.getElementById('enrollCourse');
+    
+    select.innerHTML = '<option value="">Select Course</option>';
+    courses.forEach(course => {
+        select.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+    });
+}
+
+function loadStudentsForEnrollment() {
+    const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
+    const students = users.filter(u => u.role === 'student');
+    const select = document.getElementById('enrollStudent');
+    
+    select.innerHTML = '<option value="">Select Student</option>';
+    students.forEach(student => {
+        select.innerHTML += <option value="${student.name}">${student.name}</option>;
+    });
+}
+
+document.getElementById('addUserForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('userName').value.trim();
+    const username = document.getElementById('userUsername').value.trim();
+    const password = document.getElementById('userPassword').value;
+    const role = document.getElementById('userRole').value;
+    
+    if (!name || !username || !password || !role) {
+        alert('Please fill all fields!');
+        return;
+    }
+    
+    const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
+    
+    if (users.find(u => u.username === username)) {
+        alert('Username already exists!');
+        return;
+    }
+    
+    const newUser = {
+        id: users.length + 1,
+        name: name,
+        username: username,
+        password: password,
+        role: role,
+        status: 'active'
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('systemUsers', JSON.stringify(users));
+    
+    if (role === 'student') {
+        const students = JSON.parse(localStorage.getItem('students')) || [];
+        const rollNo = '2024-' + (students.length + 1).toString().padStart(3, '0');
+        const newStudent = {
+            rollNo: rollNo,
+            name: name,
+            course: '',
+            email: username + '@student.pk'
+        };
+        students.push(newStudent);
+        localStorage.setItem('students', JSON.stringify(students));
+    }
+    
+    alert('User added successfully!');
+    this.reset();
+    closeModal(addUserModal);
+    loadUsersTable();
+    loadOverviewStats();
+});
+
+document.getElementById('addCourseForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const code = document.getElementById('courseCode').value.trim().toUpperCase();
+    const name = document.getElementById('courseName').value.trim();
+    const teacher = document.getElementById('courseTeacher').value;
+    
+    if (!code || !name || !teacher) {
+        alert('Please fill all fields!');
+        return;
+    }
+    
+    const courses = JSON.parse(localStorage.getItem('courses')) || [];
+    
+    if (courses.find(c => c.code === code)) {
+        alert('Course code already exists!');
+        return;
+    }
+    
+    const newCourse = {
+        code: code,
+        name: name,
+        teacher: teacher,
+        students: 0
+    };
+    
+    courses.push(newCourse);
+    localStorage.setItem('courses', JSON.stringify(courses));
+    
+    alert('Course added successfully!');
+    this.reset();
+    closeModal(addCourseModal);
+    loadCoursesTable();
+    loadOverviewStats();
+});
+
+document.getElementById('enrollStudentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const studentName = document.getElementById('enrollStudent').value;
+    const courseCode = document.getElementById('enrollCourse').value;
+    
+    if (!studentName || !courseCode) {
+        alert('Please select both student and course!');
+        return;
+    }
+    
+    const students = JSON.parse(localStorage.getItem('students')) || [];
+    const courses = JSON.parse(localStorage.getItem('courses')) || [];
+    
+    const studentIndex = students.findIndex(s => s.name === studentName);
+    if (studentIndex === -1) {
+        alert('Student not found!');
+        return;
+    }
+    
+    const courseIndex = courses.findIndex(c => c.code === courseCode);
+    if (courseIndex === -1) {
+        alert('Course not found!');
+        return;
+    }
+    
+    students[studentIndex].course = courseCode;
+    courses[courseIndex].students += 1;
+    
+    localStorage.setItem('students', JSON.stringify(students));
+    localStorage.setItem('courses', JSON.stringify(courses));
+    
+    alert('Student enrolled successfully in ' + courseCode);
+    this.reset();
+    closeModal(enrollStudentModal);
+    loadStudentsTable();
+    loadCoursesTable();
+    loadOverviewStats();
+});
+
 function loadOverviewStats() {
     const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
@@ -79,7 +242,7 @@ function loadRecentActivity() {
         return;
     }
     
-    activityList.innerHTML = activity.map(act => `
+    activityList.innerHTML = activity.slice(-5).reverse().map(act => `
         <div class="activity-item">
             <p><strong>${act.action}</strong> by ${act.user}</p>
             <p class="activity-time">${act.time}</p>
@@ -87,7 +250,6 @@ function loadRecentActivity() {
     `).join('');
 }
 
-// ==================== USER MANAGEMENT ====================
 function loadUsersTable() {
     const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
     const tbody = document.getElementById('usersTableBody');
@@ -111,7 +273,6 @@ function loadUsersTable() {
         </tr>
     `).join('');
     
-    // Add event listeners to dynamically created buttons
     document.querySelectorAll('.btn-edit').forEach(btn => {
         btn.addEventListener('click', function() {
             editUser(parseInt(this.getAttribute('data-user-id')));
@@ -125,34 +286,34 @@ function loadUsersTable() {
     });
 }
 
-function showAddUserModal() {
-    const name = prompt('Enter full name:');
-    if (!name) return;
+function loadStudentsTable() {
+    const students = JSON.parse(localStorage.getItem('students')) || [];
+    const tbody = document.getElementById('studentsTableBody');
     
-    const username = prompt('Enter username:');
-    if (!username) return;
+    if (!tbody) return;
     
-    const role = prompt('Enter role (admin/teacher/student):');
-    if (!role || !['admin', 'teacher', 'student'].includes(role)) {
-        alert('Invalid role!');
+    if (students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="no-data">No students found</td></tr>';
         return;
     }
     
-    const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
-    const newUser = {
-        id: users.length + 1,
-        name: name,
-        username: username,
-        role: role,
-        status: 'active'
-    };
+    const courses = JSON.parse(localStorage.getItem('courses')) || [];
     
-    users.push(newUser);
-    localStorage.setItem('systemUsers', JSON.stringify(users));
-    
-    alert('User added successfully!');
-    loadUsersTable();
-    loadOverviewStats();
+    tbody.innerHTML = students.map(student => {
+        const course = courses.find(c => c.code === student.course);
+        return `
+            <tr>
+                <td>${student.rollNo}</td>
+                <td>${student.name}</td>
+                <td>${student.email}</td>
+                <td>${course ? course.name : 'Not Enrolled'}</td>
+                <td>
+                    <button class="btn-edit" data-student-roll="${student.rollNo}">Edit</button>
+                    <button class="btn-danger" data-student-delete="${student.rollNo}">Delete</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
 function editUser(userId) {
@@ -162,26 +323,34 @@ function editUser(userId) {
     if (!user) return;
     
     const newName = prompt('Edit name:', user.name);
-    if (newName) user.name = newName;
-    
-    localStorage.setItem('systemUsers', JSON.stringify(users));
-    alert('User updated successfully!');
-    loadUsersTable();
+    if (newName) {
+        user.name = newName;
+        localStorage.setItem('systemUsers', JSON.stringify(users));
+        alert('User updated successfully!');
+        loadUsersTable();
+    }
 }
 
 function deleteUser(userId) {
     if (!confirm('Are you sure you want to delete this user?')) return;
     
     let users = JSON.parse(localStorage.getItem('systemUsers')) || [];
-    users = users.filter(u => u.id !== userId);
+    const user = users.find(u => u.id === userId);
     
+    if (user && user.role === 'student') {
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        students = students.filter(s => s.name !== user.name);
+        localStorage.setItem('students', JSON.stringify(students));
+    }
+    
+    users = users.filter(u => u.id !== userId);
     localStorage.setItem('systemUsers', JSON.stringify(users));
+    
     alert('User deleted successfully!');
     loadUsersTable();
     loadOverviewStats();
 }
 
-// ==================== COURSE MANAGEMENT ====================
 function loadCoursesTable() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const tbody = document.getElementById('coursesTableBody');
@@ -204,7 +373,6 @@ function loadCoursesTable() {
         </tr>
     `).join('');
     
-    // Add event listeners
     document.querySelectorAll('[data-course-index]').forEach(btn => {
         btn.addEventListener('click', function() {
             editCourse(parseInt(this.getAttribute('data-course-index')));
@@ -218,32 +386,6 @@ function loadCoursesTable() {
     });
 }
 
-function showAddCourseModal() {
-    const code = prompt('Enter course code:');
-    if (!code) return;
-    
-    const name = prompt('Enter course name:');
-    if (!name) return;
-    
-    const teacher = prompt('Enter teacher name:');
-    if (!teacher) return;
-    
-    const courses = JSON.parse(localStorage.getItem('courses')) || [];
-    const newCourse = {
-        code: code,
-        name: name,
-        teacher: teacher,
-        students: 0
-    };
-    
-    courses.push(newCourse);
-    localStorage.setItem('courses', JSON.stringify(courses));
-    
-    alert('Course added successfully!');
-    loadCoursesTable();
-    loadOverviewStats();
-}
-
 function editCourse(index) {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const course = courses[index];
@@ -251,11 +393,12 @@ function editCourse(index) {
     if (!course) return;
     
     const newName = prompt('Edit course name:', course.name);
-    if (newName) course.name = newName;
-    
-    localStorage.setItem('courses', JSON.stringify(courses));
-    alert('Course updated successfully!');
-    loadCoursesTable();
+    if (newName) {
+        course.name = newName;
+        localStorage.setItem('courses', JSON.stringify(courses));
+        alert('Course updated successfully!');
+        loadCoursesTable();
+    }
 }
 
 function deleteCourse(index) {
@@ -270,25 +413,125 @@ function deleteCourse(index) {
     loadOverviewStats();
 }
 
-// ==================== EVENT LISTENERS ====================
-document.addEventListener('DOMContentLoaded', function() {
-    // Add User button
-    const addUserBtn = document.getElementById('addUserBtn');
-    if (addUserBtn) {
-        addUserBtn.addEventListener('click', showAddUserModal);
-    }
+document.getElementById('viewAnalytics').addEventListener('click', function() {
+    const analyticsDisplay = document.getElementById('analyticsDisplay');
+    const analyticsContent = document.getElementById('analyticsContent');
     
-    // Add Course button
-    const addCourseBtn = document.getElementById('addCourseBtn');
-    if (addCourseBtn) {
-        addCourseBtn.addEventListener('click', showAddCourseModal);
-    }
+    const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
+    const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+    
+    let html = '<h3>Performance Analytics</h3>';
+    html += '<div class="stats-grid">';
+    
+    let totalPercentage = 0;
+    let count = 0;
+    resultsRecords.forEach(record => {
+        record.students.forEach(student => {
+            totalPercentage += parseFloat(student.percentage);
+            count++;
+        });
+    });
+    
+    const avgPerformance = count > 0 ? (totalPercentage / count).toFixed(2) : 0;
+    
+    let totalPresent = 0;
+    let totalClasses = 0;
+    attendanceRecords.forEach(record => {
+        record.students.forEach(student => {
+            totalClasses++;
+            if (student.status === 'present' || student.status === 'late') {
+                totalPresent++;
+            }
+        });
+    });
+    
+    const avgAttendance = totalClasses > 0 ? Math.round((totalPresent / totalClasses) * 100) : 0;
+    
+    html += `
+        <div class="card">
+            <h4>Average Performance</h4>
+            <p style="font-size: 32px; font-weight: 700; color: #3c5166;">${avgPerformance}%</p>
+        </div>
+        <div class="card">
+            <h4>Average Attendance</h4>
+            <p style="font-size: 32px; font-weight: 700; color: #3c5166;">${avgAttendance}%</p>
+        </div>
+        <div class="card">
+            <h4>Total Assessments</h4>
+            <p style="font-size: 32px; font-weight: 700; color: #3c5166;">${resultsRecords.length}</p>
+        </div>
+    `;
+    html += '</div>';
+    
+    analyticsContent.innerHTML = html;
+    analyticsDisplay.style.display = 'block';
 });
 
-// ==================== INITIALIZATION ====================
-initializeSampleData();
+document.getElementById('downloadReports').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    doc.setFontSize(20);
+    doc.text('Student Portal - System Report', 20, 20);
+    
+    doc.setFontSize(12);
+    doc.text(Generated on: ${new Date().toLocaleString()}, 20, 30);
+    
+    const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
+    const courses = JSON.parse(localStorage.getItem('courses')) || [];
+    const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
+    const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+    
+    doc.setFontSize(16);
+    doc.text('System Statistics:', 20, 45);
+    
+    doc.setFontSize(12);
+    doc.text(Total Users: ${users.length}, 20, 55);
+    doc.text(Total Teachers: ${users.filter(u => u.role === 'teacher').length}, 20, 62);
+    doc.text(Total Students: ${users.filter(u => u.role === 'student').length}, 20, 69);
+    doc.text(Total Courses: ${courses.length}, 20, 76);
+    doc.text(Total Assessments: ${resultsRecords.length}, 20, 83);
+    doc.text(Total Attendance Records: ${attendanceRecords.length}, 20, 90);
+    
+    doc.save('system-report.pdf');
+    alert('Report downloaded successfully!');
+});
+
+document.getElementById('generateAttendanceReport').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    doc.setFontSize(18);
+    doc.text('Attendance Report', 20, 20);
+    
+    const attendanceRecords = JSON.parse(localStorage.getItem('attendanceRecords')) || [];
+    
+    let y = 35;
+    attendanceRecords.forEach((record, index) => {
+        if (y > 270) {
+            doc.addPage();
+            y = 20;
+        }
+        
+        doc.setFontSize(14);
+        doc.text(${record.courseCode} - ${record.date}, 20, y);
+        y += 7;
+        
+        doc.setFontSize(10);
+        record.students.forEach(student => {
+            doc.text(${student.rollNo}: ${student.status}, 25, y);
+            y += 6;
+        });
+        y += 5;
+    });
+    
+    doc.save('attendance-report.pdf');
+    alert('Attendance report downloaded!');
+});
+
 loadOverviewStats();
 loadUsersTable();
+loadStudentsTable();
 loadCoursesTable();
 
 console.log('Admin Dashboard loaded successfully');

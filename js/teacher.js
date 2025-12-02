@@ -1,4 +1,3 @@
-// ==================== AUTHENTICATION CHECK ====================
 const loggedInUser = checkAuth();
 if (!loggedInUser || loggedInUser.role !== 'teacher') {
     alert('Access Denied! Teacher privileges required.');
@@ -8,7 +7,6 @@ if (!loggedInUser || loggedInUser.role !== 'teacher') {
 document.getElementById('userInfo').textContent = loggedInUser.fullName;
 document.getElementById('teacherName').textContent = loggedInUser.fullName;
 
-// ==================== SIDEBAR NAVIGATION ====================
 const menuItems = document.querySelectorAll('.menu-item');
 const contentSections = document.querySelectorAll('.content-section');
 
@@ -23,7 +21,6 @@ menuItems.forEach(item => {
     });
 });
 
-// Navigation buttons
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-navigate]').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -37,35 +34,12 @@ function showSection(sectionId) {
     menuItems.forEach(mi => mi.classList.remove('active'));
     contentSections.forEach(cs => cs.classList.remove('active'));
     
-    const menuItem = document.querySelector(`[data-section="${sectionId}"]`);
+    const menuItem = document.querySelector([data-section="${sectionId}"]);
     if (menuItem) menuItem.classList.add('active');
     
     document.getElementById(sectionId).classList.add('active');
 }
 
-// ==================== INITIALIZE SAMPLE DATA ====================
-function initializeTeacherData() {
-    if (!localStorage.getItem('students')) {
-        const sampleStudents = [
-            { rollNo: '2024-001', name: 'Jane Student', course: 'CS101', email: 'jane@example.com' },
-            { rollNo: '2024-002', name: 'Alice Johnson', course: 'CS101', email: 'alice@example.com' },
-            { rollNo: '2024-003', name: 'Bob Wilson', course: 'CS101', email: 'bob@example.com' },
-            { rollNo: '2024-004', name: 'Charlie Brown', course: 'SE301', email: 'charlie@example.com' },
-            { rollNo: '2024-005', name: 'Diana Prince', course: 'SE301', email: 'diana@example.com' }
-        ];
-        localStorage.setItem('students', JSON.stringify(sampleStudents));
-    }
-    
-    if (!localStorage.getItem('attendanceRecords')) {
-        localStorage.setItem('attendanceRecords', JSON.stringify([]));
-    }
-    
-    if (!localStorage.getItem('resultsRecords')) {
-        localStorage.setItem('resultsRecords', JSON.stringify([]));
-    }
-}
-
-// ==================== LOAD OVERVIEW STATISTICS ====================
 function loadOverviewStats() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const students = JSON.parse(localStorage.getItem('students')) || [];
@@ -73,39 +47,48 @@ function loadOverviewStats() {
     const resultsRecords = JSON.parse(localStorage.getItem('resultsRecords')) || [];
     
     const teacherCourses = courses.filter(c => c.teacher === loggedInUser.fullName);
+    const teacherCourseCodes = teacherCourses.map(c => c.code);
+    
+    const teacherStudents = students.filter(s => teacherCourseCodes.includes(s.course));
+    const teacherAttendance = attendanceRecords.filter(r => teacherCourseCodes.includes(r.courseCode));
+    const teacherResults = resultsRecords.filter(r => teacherCourseCodes.includes(r.courseCode));
     
     document.getElementById('totalCourses').textContent = teacherCourses.length;
-    document.getElementById('totalStudents').textContent = students.length;
-    document.getElementById('attendanceMarked').textContent = attendanceRecords.length;
-    document.getElementById('resultsUploaded').textContent = resultsRecords.length;
+    document.getElementById('totalStudents').textContent = teacherStudents.length;
+    document.getElementById('attendanceMarked').textContent = teacherAttendance.length;
+    document.getElementById('resultsUploaded').textContent = teacherResults.length;
     
     loadCoursesDropdown();
     loadMyCourses();
 }
 
-// ==================== LOAD COURSES DROPDOWN ====================
 function loadCoursesDropdown() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const teacherCourses = courses.filter(c => c.teacher === loggedInUser.fullName);
     
     const courseSelect = document.getElementById('courseSelect');
-    courseSelect.innerHTML = '<option value="">-- Choose Course --</option>';
-    teacherCourses.forEach(course => {
-        courseSelect.innerHTML += `<option value="${course.code}">${course.code} - ${course.name}</option>`;
-    });
+    if (courseSelect) {
+        courseSelect.innerHTML = '<option value="">Choose Course</option>';
+        teacherCourses.forEach(course => {
+            courseSelect.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+        });
+    }
     
     const resultsCourseSelect = document.getElementById('resultsCourseSelect');
-    resultsCourseSelect.innerHTML = '<option value="">-- Choose Course --</option>';
-    teacherCourses.forEach(course => {
-        resultsCourseSelect.innerHTML += `<option value="${course.code}">${course.code} - ${course.name}</option>`;
-    });
+    if (resultsCourseSelect) {
+        resultsCourseSelect.innerHTML = '<option value="">Choose Course</option>';
+        teacherCourses.forEach(course => {
+            resultsCourseSelect.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+        });
+    }
 }
 
-// ==================== LOAD MY COURSES TABLE ====================
 function loadMyCourses() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const teacherCourses = courses.filter(c => c.teacher === loggedInUser.fullName);
     const tbody = document.getElementById('myCoursesTableBody');
+    
+    if (!tbody) return;
     
     if (teacherCourses.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4" class="no-data">No courses assigned</td></tr>';
@@ -118,13 +101,16 @@ function loadMyCourses() {
             <td>${course.name}</td>
             <td>${course.students}</td>
             <td>
-                <button class="btn-secondary">View Details</button>
+                <button class="btn-secondary" onclick="viewCourseDetails('${course.code}')">View Details</button>
             </td>
         </tr>
     `).join('');
 }
 
-// ==================== ATTENDANCE MANAGEMENT ====================
+function viewCourseDetails(courseCode) {
+    alert('Course Details: ' + courseCode);
+}
+
 document.getElementById('attendanceDate').valueAsDate = new Date();
 
 function loadStudentsForAttendance() {
@@ -213,7 +199,6 @@ function saveAttendance() {
     }
 }
 
-// ==================== RESULTS MANAGEMENT ====================
 function loadStudentsForResults() {
     const courseCode = document.getElementById('resultsCourseSelect').value;
     const assessmentType = document.getElementById('assessmentType').value;
@@ -252,7 +237,6 @@ function loadStudentsForResults() {
         </tr>
     `).join('');
     
-    // Add event listeners to marks inputs
     document.querySelectorAll('.marks-input').forEach(input => {
         input.addEventListener('input', function() {
             calculateGrade(this, parseInt(totalMarks));
@@ -265,7 +249,7 @@ function loadStudentsForResults() {
 function calculateGrade(input, totalMarks) {
     const marks = parseFloat(input.value);
     const rollNo = input.getAttribute('data-roll');
-    const gradeDisplay = document.querySelector(`.grade-display[data-roll="${rollNo}"]`);
+    const gradeDisplay = document.querySelector(.grade-display[data-roll="${rollNo}"]);
     
     if (isNaN(marks) || marks < 0) {
         gradeDisplay.textContent = '-';
@@ -273,7 +257,7 @@ function calculateGrade(input, totalMarks) {
     }
     
     if (marks > totalMarks) {
-        alert(`Marks cannot exceed ${totalMarks}`);
+        alert(Marks cannot exceed ${totalMarks});
         input.value = totalMarks;
         return;
     }
@@ -337,7 +321,7 @@ function saveResults() {
         marksInputs.forEach(input => {
             const rollNo = input.getAttribute('data-roll');
             const marks = parseFloat(input.value) || 0;
-            const gradeDisplay = document.querySelector(`.grade-display[data-roll="${rollNo}"]`);
+            const gradeDisplay = document.querySelector(.grade-display[data-roll="${rollNo}"]);
             const grade = gradeDisplay.textContent;
             
             record.students.push({
@@ -364,7 +348,6 @@ function saveResults() {
     }
 }
 
-// ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', function() {
     const loadStudentsBtn = document.getElementById('loadStudentsBtn');
     if (loadStudentsBtn) {
@@ -387,9 +370,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ==================== INITIALIZATION ====================
-initializeTeacherData();
 loadOverviewStats();
-
-console.log('Teacher Dashboard loaded successfully');
-console.log('Current User:', loggedInUser);

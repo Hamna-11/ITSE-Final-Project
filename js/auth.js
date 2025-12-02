@@ -1,35 +1,30 @@
-// ==================== AUTHENTICATION MODULE ====================
-
-// Demo users database
 const users = {
     admin: { 
         username: 'admin', 
         password: '123', 
         role: 'admin',
-        fullName: 'System Administrator'
+        fullName: 'Admin Khan'
     },
     teacher: { 
         username: 'teacher', 
         password: '123', 
         role: 'teacher',
-        fullName: 'John Teacher'
+        fullName: 'Usman Ali'
     },
     student: { 
         username: 'student', 
         password: '123', 
         role: 'student',
-        fullName: 'Jane Student'
+        fullName: 'Ayesha Fatima'
     }
 };
 
-// Dashboard page mappings
 const dashboardPages = {
     admin: 'admin.html',
     teacher: 'teacher.html',
     student: 'student.html'
 };
 
-// ==================== LOGIN FORM HANDLER ====================
 const loginForm = document.getElementById('loginForm');
 
 if (loginForm) {
@@ -58,6 +53,14 @@ if (loginForm) {
             
             localStorage.setItem('currentUser', JSON.stringify(userData));
             
+            const activity = JSON.parse(localStorage.getItem('systemActivity')) || [];
+            activity.push({
+                action: 'User Login',
+                user: users[role].fullName,
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('systemActivity', JSON.stringify(activity));
+            
             alert('Login successful! Welcome ' + users[role].fullName);
             
             window.location.href = dashboardPages[role];
@@ -69,15 +72,23 @@ if (loginForm) {
     });
 }
 
-// ==================== UTILITY FUNCTIONS ====================
-
-// Logout function
 function logout() {
+    const currentUser = getCurrentUser();
+    
+    if (currentUser) {
+        const activity = JSON.parse(localStorage.getItem('systemActivity')) || [];
+        activity.push({
+            action: 'User Logout',
+            user: currentUser.fullName,
+            time: new Date().toLocaleString()
+        });
+        localStorage.setItem('systemActivity', JSON.stringify(activity));
+    }
+    
     localStorage.removeItem('currentUser');
     window.location.href = 'main.html';
 }
 
-// Check authentication
 function checkAuth() {
     const currentUser = localStorage.getItem('currentUser');
     
@@ -90,29 +101,22 @@ function checkAuth() {
     return JSON.parse(currentUser);
 }
 
-// Get current logged in user
 function getCurrentUser() {
     const currentUser = localStorage.getItem('currentUser');
     return currentUser ? JSON.parse(currentUser) : null;
 }
 
-// Check if user has specific role
 function hasRole(requiredRole) {
     const user = getCurrentUser();
     return user && user.role === requiredRole;
 }
 
-// ==================== LOGOUT BUTTON HANDLER ====================
-// This will work on dashboard pages
 document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', logout);
     }
 });
-
-// ==================== INITIALIZATION ====================
-console.log('Auth module loaded successfully');
 
 if (loginForm) {
     const existingUser = getCurrentUser();
