@@ -1,7 +1,5 @@
-/* ==================== GOOGLE FONTS ==================== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* ==================== RESET & BASE ==================== */
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +14,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ==================== MAIN CONTAINER ==================== */
 .main-container {
     position: relative;
     width: 100%;
@@ -27,7 +24,6 @@ body {
     padding: 40px 20px;
 }
 
-/* ==================== BACKGROUND IMAGE ==================== */
 .background-section {
     position: absolute;
     top: 0;
@@ -52,7 +48,6 @@ body {
     z-index: 1;
 }
 
-/* ==================== LOGIN BOX ==================== */
 .left-section {
     position: relative;
     z-index: 2;
@@ -88,7 +83,6 @@ body {
     }
 }
 
-/* Scrollbar */
 .left-section::-webkit-scrollbar {
     width: 5px;
 }
@@ -102,7 +96,6 @@ body {
     border-radius: 10px;
 }
 
-/* ==================== LOGIN BOX CONTENT ==================== */
 .login-box {
     width: 100%;
 }
@@ -126,7 +119,6 @@ body {
     font-weight: 400;
 }
 
-/* ==================== FORM STYLES ==================== */
 .form-group {
     margin-bottom: 24px;
 }
@@ -189,7 +181,6 @@ body {
     padding: 12px;
 }
 
-/* ==================== BUTTON STYLES ==================== */
 .btn-login {
     width: 100%;
     padding: 18px;
@@ -223,7 +214,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
     .left-section {
         max-width: 100%;

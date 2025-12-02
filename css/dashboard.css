@@ -19,7 +19,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Background pattern overlay */
 body::before {
     content: '';
     position: fixed;
@@ -34,7 +33,6 @@ body::before {
     z-index: 0;
 }
 
-/* ==================== NAVIGATION BAR ==================== */
 .navbar {
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(20px) saturate(180%);
@@ -105,7 +103,6 @@ body::before {
     box-shadow: 0 6px 25px rgba(60, 81, 102, 0.4);
 }
 
-/* ==================== DASHBOARD CONTAINER ==================== */
 .dashboard-container {
     display: flex;
     margin-top: 70px;
@@ -114,7 +111,6 @@ body::before {
     z-index: 1;
 }
 
-/* ==================== SIDEBAR ==================== */
 .sidebar {
     width: 280px;
     background: rgba(255, 255, 255, 0.12);
@@ -209,7 +205,6 @@ body::before {
     opacity: 0;
 }
 
-/* ==================== MAIN CONTENT ==================== */
 .main-content {
     flex: 1;
     margin-left: 280px;
@@ -237,7 +232,6 @@ body::before {
     }
 }
 
-/* ==================== PAGE HEADER ==================== */
 .page-header {
     margin-bottom: 32px;
     display: flex;
@@ -268,7 +262,6 @@ body::before {
     font-weight: 500;
 }
 
-/* ==================== BUTTONS ==================== */
 .btn-primary {
     background: #3c5166;
     color: #ffffff;
@@ -358,17 +351,14 @@ body::before {
     box-shadow: 0 6px 25px rgba(60, 81, 102, 0.4);
 }
 
-/* ==================== STATISTICS CARDS (REMOVED INNER BOXES) ==================== */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 24px;
     margin-bottom: 32px;
+    text-align: center;
 }
 
-/* No more stat cards - just clean display */
-
-/* ==================== CARDS ==================== */
 .card {
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(20px) saturate(180%);
@@ -379,6 +369,7 @@ body::before {
     margin-bottom: 24px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 .card:hover {
@@ -404,7 +395,6 @@ body::before {
     letter-spacing: -0.3px;
 }
 
-/* ==================== TABLES ==================== */
 .table-container {
     overflow-x: auto;
     border-radius: 8px;
@@ -463,7 +453,6 @@ body::before {
     font-weight: 600;
 }
 
-/* ==================== FORMS ==================== */
 .form-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -527,7 +516,6 @@ body::before {
     color: #2d3748;
 }
 
-/* ==================== ACTIVITY LIST ==================== */
 .activity-list {
     max-height: 400px;
     overflow-y: auto;
@@ -579,7 +567,6 @@ body::before {
     font-weight: 600;
 }
 
-/* ==================== REPORTS GRID ==================== */
 .reports-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -605,7 +592,6 @@ body::before {
     font-weight: 500;
 }
 
-/* ==================== STATUS BADGES ==================== */
 .status-badge {
     display: inline-block;
     padding: 8px 16px;
@@ -628,10 +614,6 @@ body::before {
     border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
-/* ==================== ATTENDANCE SUMMARY (REMOVED) ==================== */
-/* Removed to clean up dashboard */
-
-/* ==================== PROFILE INFO ==================== */
 .profile-info {
     display: flex;
     flex-direction: column;
@@ -668,7 +650,6 @@ body::before {
     font-size: 15px;
 }
 
-/* ==================== RESPONSIVE DESIGN ==================== */
 @media (max-width: 1024px) {
     .sidebar {
         width: 240px;
