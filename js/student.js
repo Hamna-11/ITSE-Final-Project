@@ -114,9 +114,7 @@ function calculateAverageGrade(resultsRecords) {
         }
     });
     
-    const percentage = Math.round((marks / totalMarks) * 100);
-    let grade = '';
-    
+    let avgGrade = '-';
     if (assessmentCount > 0) {
         const avgPercentage = totalPercentage / assessmentCount;
         if (avgPercentage >= 90) avgGrade = 'A+';
