@@ -170,14 +170,31 @@ function saveAttendance() {
         );
         
         if (existingIndex >= 0) {
+            const confirmUpdate = confirm(
+                `Attendance for ${courseCode} on ${date} already exists.\n\n` +
+                `Do you want to UPDATE the existing record?`
+            );
+            
+            if (!confirmUpdate) {
+                return; 
+            }
+            
             attendanceRecords[existingIndex] = record;
-            alert('Attendance updated successfully!');
+            alert('Attendance record UPDATED successfully for ' + courseCode + '!');
         } else {
             attendanceRecords.push(record);
-            alert('Attendance saved successfully!');
+            alert('Attendance record SAVED successfully for ' + courseCode + '!');
         }
         
         localStorage.setItem('attendanceRecords', JSON.stringify(attendanceRecords));
+        
+        const activity = JSON.parse(localStorage.getItem('systemActivity')) || [];
+        activity.push({
+            action: existingIndex >= 0 ? 'Attendance Updated' : 'Attendance Marked',
+            user: loggedInUser.fullName,
+            time: new Date().toLocaleString()
+        });
+        localStorage.setItem('systemActivity', JSON.stringify(activity));
         
         document.getElementById('attendanceTableCard').style.display = 'none';
         document.getElementById('courseSelect').value = '';
@@ -268,13 +285,35 @@ function saveResults() {
         return;
     }
     
-    let allEntered = true;
+    let hasInvalidMarks = false;
+    let hasEmptyMarks = false;
+    
     marksInputs.forEach(input => {
-        if (!input.value) allEntered = false;
+        const marks = parseFloat(input.value);
+        
+        if (!input.value || input.value.trim() === '') {
+            hasEmptyMarks = true;
+        } else if (isNaN(marks) || marks < 0) {
+            hasInvalidMarks = true;
+            input.style.border = '2px solid #dc2626';
+        } else if (marks > totalMarks) {
+            hasInvalidMarks = true;
+            input.style.border = '2px solid #dc2626';
+        } else {
+            input.style.border = '2px solid #e5e7eb';
+        }
     });
     
-    if (!allEntered) {
-        if (!confirm('Some marks are missing. Do you want to continue?')) {
+    if (hasInvalidMarks) {
+        alert('⚠ ERROR: Some marks are invalid!\n\n' +
+              '• Marks cannot be negative\n' +
+              '• Marks cannot exceed total marks (' + totalMarks + ')\n\n' +
+              'Invalid fields are highlighted in red. Please correct them.');
+        return;
+    }
+    
+    if (hasEmptyMarks) {
+        if (!confirm('⚠ WARNING: Some marks are missing.\n\nDo you want to continue?\n\n(Missing marks will be saved as 0)')) {
             return;
         }
     }
@@ -294,9 +333,9 @@ function saveResults() {
         
         marksInputs.forEach(input => {
             const rollNo = input.getAttribute('data-roll');
-            const marks = parseFloat(input.value) || 0;
-            const gradeDisplay = document.querySelector('.grade-display[data-roll="' + rollNo + '"]');
-            const grade = gradeDisplay.textContent;
+            const marks = parseFloat(input.value) || 0; 
+            const gradeDisplay = document.querySelector(`.grade-display[data-roll="${rollNo}"]`);
+            const grade = gradeDisplay.textContent || 'F';
             
             record.students.push({
                 rollNo: rollNo,
@@ -309,7 +348,15 @@ function saveResults() {
         resultsRecords.push(record);
         localStorage.setItem('resultsRecords', JSON.stringify(resultsRecords));
         
-        alert('Results saved successfully!');
+        const activity = JSON.parse(localStorage.getItem('systemActivity')) || [];
+        activity.push({
+            action: 'Results Uploaded',
+            user: loggedInUser.fullName,
+            time: new Date().toLocaleString()
+        });
+        localStorage.setItem('systemActivity', JSON.stringify(activity));
+        
+        alert('✓ Results saved successfully for ' + courseCode + '!');
         
         document.getElementById('resultsTableCard').style.display = 'none';
         document.getElementById('resultsCourseSelect').value = '';
