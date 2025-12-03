@@ -65,7 +65,10 @@ function loadTeachersList() {
     
     select.innerHTML = '<option value="">Select Teacher</option>';
     teachers.forEach(teacher => {
-        select.innerHTML += <option value="${teacher.name}">${teacher.name}</option>;
+        const option = document.createElement('option');
+        option.value = teacher.name;
+        option.textContent = teacher.name;
+        select.appendChild(option);
     });
 }
 
@@ -75,7 +78,10 @@ function loadCoursesForEnrollment() {
     
     select.innerHTML = '<option value="">Select Course</option>';
     courses.forEach(course => {
-        select.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+        const option = document.createElement('option');
+        option.value = course.code;
+        option.textContent = course.code + ' - ' + course.name;
+        select.appendChild(option);
     });
 }
 
@@ -86,7 +92,10 @@ function loadStudentsForEnrollment() {
     
     select.innerHTML = '<option value="">Select Student</option>';
     students.forEach(student => {
-        select.innerHTML += <option value="${student.name}">${student.name}</option>;
+        const option = document.createElement('option');
+        option.value = student.name;
+        option.textContent = student.name;
+        select.appendChild(option);
     });
 }
 
@@ -242,12 +251,9 @@ function loadRecentActivity() {
         return;
     }
     
-    activityList.innerHTML = activity.slice(-5).reverse().map(act => `
-        <div class="activity-item">
-            <p><strong>${act.action}</strong> by ${act.user}</p>
-            <p class="activity-time">${act.time}</p>
-        </div>
-    `).join('');
+    activityList.innerHTML = activity.slice(-5).reverse().map(act => {
+        return '<div class="activity-item"><p><strong>' + act.action + '</strong> by ' + act.user + '</p><p class="activity-time">' + act.time + '</p></div>';
+    }).join('');
 }
 
 function loadUsersTable() {
@@ -259,19 +265,9 @@ function loadUsersTable() {
         return;
     }
     
-    tbody.innerHTML = users.map(user => `
-        <tr>
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${user.username}</td>
-            <td><span class="status-badge">${user.role}</span></td>
-            <td><span class="status-badge ${user.status}">${user.status}</span></td>
-            <td>
-                <button class="btn-edit" data-user-id="${user.id}">Edit</button>
-                <button class="btn-danger" data-user-delete="${user.id}">Delete</button>
-            </td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = users.map(user => {
+        return '<tr><td>' + user.id + '</td><td>' + user.name + '</td><td>' + user.username + '</td><td><span class="status-badge">' + user.role + '</span></td><td><span class="status-badge ' + user.status + '">' + user.status + '</span></td><td><button class="btn-edit" data-user-id="' + user.id + '">Edit</button><button class="btn-danger" data-user-delete="' + user.id + '">Delete</button></td></tr>';
+    }).join('');
     
     document.querySelectorAll('.btn-edit').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -301,18 +297,7 @@ function loadStudentsTable() {
     
     tbody.innerHTML = students.map(student => {
         const course = courses.find(c => c.code === student.course);
-        return `
-            <tr>
-                <td>${student.rollNo}</td>
-                <td>${student.name}</td>
-                <td>${student.email}</td>
-                <td>${course ? course.name : 'Not Enrolled'}</td>
-                <td>
-                    <button class="btn-edit" data-student-roll="${student.rollNo}">Edit</button>
-                    <button class="btn-danger" data-student-delete="${student.rollNo}">Delete</button>
-                </td>
-            </tr>
-        `;
+        return '<tr><td>' + student.rollNo + '</td><td>' + student.name + '</td><td>' + student.email + '</td><td>' + (course ? course.name : 'Not Enrolled') + '</td><td><button class="btn-edit" data-student-roll="' + student.rollNo + '">Edit</button><button class="btn-danger" data-student-delete="' + student.rollNo + '">Delete</button></td></tr>';
     }).join('');
 }
 
@@ -360,18 +345,9 @@ function loadCoursesTable() {
         return;
     }
     
-    tbody.innerHTML = courses.map((course, index) => `
-        <tr>
-            <td>${course.code}</td>
-            <td>${course.name}</td>
-            <td>${course.teacher}</td>
-            <td>${course.students}</td>
-            <td>
-                <button class="btn-edit" data-course-index="${index}">Edit</button>
-                <button class="btn-danger" data-course-delete="${index}">Delete</button>
-            </td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = courses.map((course, index) => {
+        return '<tr><td>' + course.code + '</td><td>' + course.name + '</td><td>' + course.teacher + '</td><td>' + course.students + '</td><td><button class="btn-edit" data-course-index="' + index + '">Edit</button><button class="btn-danger" data-course-delete="' + index + '">Delete</button></td></tr>';
+    }).join('');
     
     document.querySelectorAll('[data-course-index]').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -447,20 +423,9 @@ document.getElementById('viewAnalytics').addEventListener('click', function() {
     
     const avgAttendance = totalClasses > 0 ? Math.round((totalPresent / totalClasses) * 100) : 0;
     
-    html += `
-        <div class="card">
-            <h4>Average Performance</h4>
-            <p style="font-size: 32px; font-weight: 700; color: #3c5166;">${avgPerformance}%</p>
-        </div>
-        <div class="card">
-            <h4>Average Attendance</h4>
-            <p style="font-size: 32px; font-weight: 700; color: #3c5166;">${avgAttendance}%</p>
-        </div>
-        <div class="card">
-            <h4>Total Assessments</h4>
-            <p style="font-size: 32px; font-weight: 700; color: #3c5166;">${resultsRecords.length}</p>
-        </div>
-    `;
+    html += '<div class="card"><h4>Average Performance</h4><p style="font-size: 32px; font-weight: 700; color: #3c5166;">' + avgPerformance + '%</p></div>';
+    html += '<div class="card"><h4>Average Attendance</h4><p style="font-size: 32px; font-weight: 700; color: #3c5166;">' + avgAttendance + '%</p></div>';
+    html += '<div class="card"><h4>Total Assessments</h4><p style="font-size: 32px; font-weight: 700; color: #3c5166;">' + resultsRecords.length + '</p></div>';
     html += '</div>';
     
     analyticsContent.innerHTML = html;
@@ -475,7 +440,7 @@ document.getElementById('downloadReports').addEventListener('click', function() 
     doc.text('Student Portal - System Report', 20, 20);
     
     doc.setFontSize(12);
-    doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, 30);
+    doc.text('Generated on: ' + new Date().toLocaleString(), 20, 30);
     
     const users = JSON.parse(localStorage.getItem('systemUsers')) || [];
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
@@ -486,12 +451,12 @@ document.getElementById('downloadReports').addEventListener('click', function() 
     doc.text('System Statistics:', 20, 45);
     
     doc.setFontSize(12);
-    doc.text(`Total Users: ${users.length}`, 20, 55);
-    doc.text(`Total Teachers: ${users.filter(u => u.role === 'teacher').length}`, 20, 62);
-    doc.text(`Total Students: ${users.filter(u => u.role === 'student').length}`, 20, 69);
-    doc.text(`Total Courses: ${courses.length}`, 20, 76);
-    doc.text(`Total Assessments: ${resultsRecords.length}`, 20, 83);
-    doc.text(`Total Attendance Records: ${attendanceRecords.length}`, 20, 90);
+    doc.text('Total Users: ' + users.length, 20, 55);
+    doc.text('Total Teachers: ' + users.filter(u => u.role === 'teacher').length, 20, 62);
+    doc.text('Total Students: ' + users.filter(u => u.role === 'student').length, 20, 69);
+    doc.text('Total Courses: ' + courses.length, 20, 76);
+    doc.text('Total Assessments: ' + resultsRecords.length, 20, 83);
+    doc.text('Total Attendance Records: ' + attendanceRecords.length, 20, 90);
     
     doc.save('system-report.pdf');
     alert('Report downloaded successfully!');
@@ -514,12 +479,12 @@ document.getElementById('generateAttendanceReport').addEventListener('click', fu
         }
         
         doc.setFontSize(14);
-        doc.text(`${record.courseCode} - ${record.date}`, 20, y);
+        doc.text(record.courseCode + ' - ' + record.date, 20, y);
         y += 7;
         
         doc.setFontSize(10);
         record.students.forEach(student => {
-            doc.text(`${student.rollNo}: ${student.status}`, 25, y);
+            doc.text(student.rollNo + ': ' + student.status, 25, y);
             y += 6;
         });
         y += 5;

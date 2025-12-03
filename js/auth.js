@@ -3,19 +3,19 @@ const users = {
         username: 'admin', 
         password: '123', 
         role: 'admin',
-        fullName: 'Admin Khan'
+        fullName: 'Ali Ahmed'
     },
     teacher: { 
         username: 'teacher', 
         password: '123', 
         role: 'teacher',
-        fullName: 'Usman Ali'
+        fullName: 'Fatima Khan'
     },
     student: { 
         username: 'student', 
         password: '123', 
         role: 'student',
-        fullName: 'Ayesha Fatima'
+        fullName: 'Sara Malik'
     }
 };
 

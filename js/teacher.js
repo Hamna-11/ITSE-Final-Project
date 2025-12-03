@@ -34,7 +34,7 @@ function showSection(sectionId) {
     menuItems.forEach(mi => mi.classList.remove('active'));
     contentSections.forEach(cs => cs.classList.remove('active'));
     
-    const menuItem = document.querySelector([data-section="${sectionId}"]);
+    const menuItem = document.querySelector('[data-section="' + sectionId + '"]');
     if (menuItem) menuItem.classList.add('active');
     
     document.getElementById(sectionId).classList.add('active');
@@ -70,7 +70,10 @@ function loadCoursesDropdown() {
     if (courseSelect) {
         courseSelect.innerHTML = '<option value="">Choose Course</option>';
         teacherCourses.forEach(course => {
-            courseSelect.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+            const option = document.createElement('option');
+            option.value = course.code;
+            option.textContent = course.code + ' - ' + course.name;
+            courseSelect.appendChild(option);
         });
     }
     
@@ -78,7 +81,10 @@ function loadCoursesDropdown() {
     if (resultsCourseSelect) {
         resultsCourseSelect.innerHTML = '<option value="">Choose Course</option>';
         teacherCourses.forEach(course => {
-            resultsCourseSelect.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+            const option = document.createElement('option');
+            option.value = course.code;
+            option.textContent = course.code + ' - ' + course.name;
+            resultsCourseSelect.appendChild(option);
         });
     }
 }
@@ -95,16 +101,9 @@ function loadMyCourses() {
         return;
     }
     
-    tbody.innerHTML = teacherCourses.map(course => `
-        <tr>
-            <td>${course.code}</td>
-            <td>${course.name}</td>
-            <td>${course.students}</td>
-            <td>
-                <button class="btn-secondary" onclick="viewCourseDetails('${course.code}')">View Details</button>
-            </td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = teacherCourses.map(course => {
+        return '<tr><td>' + course.code + '</td><td>' + course.name + '</td><td>' + course.students + '</td><td><button class="btn-secondary" onclick="viewCourseDetails(\'' + course.code + '\')">View Details</button></td></tr>';
+    }).join('');
 }
 
 function viewCourseDetails(courseCode) {
@@ -131,19 +130,9 @@ function loadStudentsForAttendance() {
     }
     
     const tbody = document.getElementById('attendanceTableBody');
-    tbody.innerHTML = courseStudents.map(student => `
-        <tr>
-            <td>${student.rollNo}</td>
-            <td>${student.name}</td>
-            <td>
-                <select class="attendance-status" data-roll="${student.rollNo}">
-                    <option value="present">Present</option>
-                    <option value="absent">Absent</option>
-                    <option value="late">Late</option>
-                </select>
-            </td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = courseStudents.map(student => {
+        return '<tr><td>' + student.rollNo + '</td><td>' + student.name + '</td><td><select class="attendance-status" data-roll="' + student.rollNo + '"><option value="present">Present</option><option value="absent">Absent</option><option value="late">Late</option></select></td></tr>';
+    }).join('');
     
     document.getElementById('attendanceTableCard').style.display = 'block';
 }
@@ -218,24 +207,9 @@ function loadStudentsForResults() {
     }
     
     const tbody = document.getElementById('resultsTableBody');
-    tbody.innerHTML = courseStudents.map(student => `
-        <tr>
-            <td>${student.rollNo}</td>
-            <td>${student.name}</td>
-            <td>
-                <input type="number" 
-                       class="marks-input" 
-                       data-roll="${student.rollNo}"
-                       min="0" 
-                       max="${totalMarks}" 
-                       placeholder="Enter marks"
-                       style="width: 120px; padding: 8px; border: 2px solid #e5e7eb; border-radius: 4px;">
-            </td>
-            <td>
-                <span class="grade-display" data-roll="${student.rollNo}">-</span>
-            </td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = courseStudents.map(student => {
+        return '<tr><td>' + student.rollNo + '</td><td>' + student.name + '</td><td><input type="number" class="marks-input" data-roll="' + student.rollNo + '" min="0" max="' + totalMarks + '" placeholder="Enter marks" style="width: 120px; padding: 8px; border: 2px solid #e5e7eb; border-radius: 4px;"></td><td><span class="grade-display" data-roll="' + student.rollNo + '">-</span></td></tr>';
+    }).join('');
     
     document.querySelectorAll('.marks-input').forEach(input => {
         input.addEventListener('input', function() {
@@ -249,7 +223,7 @@ function loadStudentsForResults() {
 function calculateGrade(input, totalMarks) {
     const marks = parseFloat(input.value);
     const rollNo = input.getAttribute('data-roll');
-    const gradeDisplay = document.querySelector(.grade-display[data-roll="${rollNo}"]);
+    const gradeDisplay = document.querySelector('.grade-display[data-roll="' + rollNo + '"]');
     
     if (isNaN(marks) || marks < 0) {
         gradeDisplay.textContent = '-';
@@ -257,7 +231,7 @@ function calculateGrade(input, totalMarks) {
     }
     
     if (marks > totalMarks) {
-        alert(Marks cannot exceed ${totalMarks});
+        alert('Marks cannot exceed ' + totalMarks);
         input.value = totalMarks;
         return;
     }
@@ -321,7 +295,7 @@ function saveResults() {
         marksInputs.forEach(input => {
             const rollNo = input.getAttribute('data-roll');
             const marks = parseFloat(input.value) || 0;
-            const gradeDisplay = document.querySelector(.grade-display[data-roll="${rollNo}"]);
+            const gradeDisplay = document.querySelector('.grade-display[data-roll="' + rollNo + '"]');
             const grade = gradeDisplay.textContent;
             
             record.students.push({

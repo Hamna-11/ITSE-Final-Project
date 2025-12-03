@@ -44,7 +44,7 @@ function showSection(sectionId) {
     menuItems.forEach(mi => mi.classList.remove('active'));
     contentSections.forEach(cs => cs.classList.remove('active'));
     
-    const menuItem = document.querySelector(`[data-section ="${sectionId}"]`);
+    const menuItem = document.querySelector('[data-section="' + sectionId + '"]');
     if (menuItem) menuItem.classList.add('active');
     
     document.getElementById(sectionId).classList.add('active');
@@ -151,7 +151,10 @@ function loadAttendanceData() {
     if (courseFilter) {
         courseFilter.innerHTML = '<option value="">All Courses</option>';
         courses.forEach(course => {
-            courseFilter.innerHTML += <option value="${course.code}">${course.code} - ${course.name}</option>;
+            const option = document.createElement('option');
+            option.value = course.code;
+            option.textContent = course.code + ' - ' + course.name;
+            courseFilter.appendChild(option);
         });
     }
 }
@@ -186,23 +189,15 @@ function loadCourseWiseAttendance(attendanceRecords, courses) {
         return;
     }
     
-    tbody.innerHTML = Object.entries(courseAttendance).map(([courseCode, data]) => {
+    tbody.innerHTML = Object.entries(courseAttendance).map(function(entry) {
+        const courseCode = entry[0];
+        const data = entry[1];
         const course = courses.find(c => c.code === courseCode);
         const percentage = Math.round((data.present / data.total) * 100);
         const status = percentage >= 75 ? 'Good' : 'Low';
         const statusColor = percentage >= 75 ? '#16a34a' : '#dc2626';
         
-        return `
-            <tr>
-                <td>${courseCode}</td>
-                <td>${course ? course.name : 'Unknown'}</td>
-                <td>${data.total}</td>
-                <td>${data.present}</td>
-                <td>${data.absent}</td>
-                <td><strong>${percentage}%</strong></td>
-                <td style="color: ${statusColor}; font-weight: 600;">${status}</td>
-            </tr>
-        `;
+        return '<tr><td>' + courseCode + '</td><td>' + (course ? course.name : 'Unknown') + '</td><td>' + data.total + '</td><td>' + data.present + '</td><td>' + data.absent + '</td><td><strong>' + percentage + '%</strong></td><td style="color: ' + statusColor + '; font-weight: 600;">' + status + '</td></tr>';
     }).join('');
 }
 
@@ -233,14 +228,7 @@ function loadAttendanceLog(attendanceRecords, courses) {
     
     tbody.innerHTML = studentAttendance.map(record => {
         const statusText = record.status.charAt(0).toUpperCase() + record.status.slice(1);
-        
-        return `
-            <tr>
-                <td>${new Date(record.date).toLocaleDateString()}</td>
-                <td>${record.courseCode} - ${record.courseName}</td>
-                <td>${statusText}</td>
-            </tr>
-        `;
+        return '<tr><td>' + new Date(record.date).toLocaleDateString() + '</td><td>' + record.courseCode + ' - ' + record.courseName + '</td><td>' + statusText + '</td></tr>';
     }).join('');
 }
 
@@ -280,12 +268,21 @@ function loadResultsData() {
     
     const courseFilter = document.getElementById('resultsCourseFilter');
     if (courseFilter) {
-        const studentCourses = [...new Set(resultsRecords.map(r => r.courseCode))];
+        const studentCourses = [];
+        resultsRecords.forEach(r => {
+            if (studentCourses.indexOf(r.courseCode) === -1) {
+                studentCourses.push(r.courseCode);
+            }
+        });
+        
         courseFilter.innerHTML = '<option value="">Choose Course</option>';
         studentCourses.forEach(courseCode => {
             const course = courses.find(c => c.code === courseCode);
             if (course) {
-                courseFilter.innerHTML += <option value="${courseCode}">${courseCode} - ${course.name}</option>;
+                const option = document.createElement('option');
+                option.value = courseCode;
+                option.textContent = courseCode + ' - ' + course.name;
+                courseFilter.appendChild(option);
             }
         });
     }
@@ -318,16 +315,7 @@ function filterCourseResults() {
                           studentResult.grade.startsWith('B') ? '#2563eb' : 
                           studentResult.grade.startsWith('C') ? '#ea580c' : '#dc2626';
         
-        return `
-            <tr>
-                <td>${record.assessmentType.charAt(0).toUpperCase() + record.assessmentType.slice(1)}</td>
-                <td>${record.totalMarks}</td>
-                <td>${studentResult.marks}</td>
-                <td><strong>${studentResult.percentage}%</strong></td>
-                <td style="color: ${gradeColor}; font-weight: 700; font-size: 16px;">${studentResult.grade}</td>
-                <td>${new Date(record.timestamp).toLocaleDateString()}</td>
-            </tr>
-        `;
+        return '<tr><td>' + record.assessmentType.charAt(0).toUpperCase() + record.assessmentType.slice(1) + '</td><td>' + record.totalMarks + '</td><td>' + studentResult.marks + '</td><td><strong>' + studentResult.percentage + '%</strong></td><td style="color: ' + gradeColor + '; font-weight: 700; font-size: 16px;">' + studentResult.grade + '</td><td>' + new Date(record.timestamp).toLocaleDateString() + '</td></tr>';
     }).join('');
 }
 
@@ -359,14 +347,7 @@ function loadMyCourses() {
         
         const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
         
-        return `
-            <tr>
-                <td>${course.code}</td>
-                <td>${course.name}</td>
-                <td>${course.teacher}</td>
-                <td><strong>${percentage}%</strong></td>
-            </tr>
-        `;
+        return '<tr><td>' + course.code + '</td><td>' + course.name + '</td><td>' + course.teacher + '</td><td><strong>' + percentage + '%</strong></td></tr>';
     }).join('');
 }
 
