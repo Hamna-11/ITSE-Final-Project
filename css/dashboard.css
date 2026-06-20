@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap');
 
 :root {
     --navy: #3c5166;
@@ -9,6 +9,7 @@
     --glass: rgba(255, 255, 255, 0.1);
     --glass-border: rgba(255, 255, 255, 0.22);
     --glass-strong: rgba(255, 255, 255, 0.16);
+    --display: 'Fraunces', Georgia, serif;
 }
 
 * {
@@ -72,9 +73,10 @@ body::after {
 }
 
 .navbar-left h2 {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
     color: #ffffff;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
@@ -146,61 +148,78 @@ body::after {
 .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 10px; }
 
 .sidebar-header {
-    padding: 30px 24px 22px;
+    padding: 28px 24px 20px;
     border-bottom: 1px solid var(--glass-border);
 }
 
 .sidebar-header h3 {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.85);
-    font-weight: 800;
-    letter-spacing: 1.8px;
-    text-transform: uppercase;
+    font-family: var(--display);
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
 }
 
 .sidebar-menu {
     list-style: none;
     padding: 18px 14px;
+    counter-reset: nav-index;
 }
 
 .menu-item {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 14px;
-    padding: 15px 18px;
-    margin-bottom: 6px;
+    padding: 14px 18px;
+    margin-bottom: 2px;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    color: rgba(244, 246, 248, 0.65);
+    color: rgba(244, 246, 248, 0.6);
     font-size: 14px;
-    font-weight: 600;
-    border-radius: 10px;
+    font-weight: 500;
+    border-radius: 8px;
     position: relative;
+    counter-increment: nav-index;
+}
+
+.menu-item::before {
+    content: counter(nav-index, decimal-leading-zero);
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(126, 184, 232, 0.5);
+    flex-shrink: 0;
+    transition: color 0.25s ease;
 }
 
 .menu-item:hover {
     background: var(--glass);
     color: #ffffff;
-    transform: translateX(3px);
 }
 
+.menu-item:hover::before { color: rgba(126, 184, 232, 0.85); }
+
 .menu-item.active {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.07);
     color: #ffffff;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .menu-item.active::before {
+    color: var(--accent);
+}
+
+.menu-item.active::after {
     content: '';
     position: absolute;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 4px;
-    height: 60%;
-    background: #7eb8e8;
-    border-radius: 0 4px 4px 0;
-    box-shadow: 0 0 12px rgba(126, 184, 232, 0.5);
+    width: 3px;
+    height: 56%;
+    background: var(--accent);
+    border-radius: 0 3px 3px 0;
 }
 
 .main-content {
@@ -243,21 +262,25 @@ body::after {
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 16px;
     border: 1px solid var(--glass-border);
+    border-left: 3px solid var(--accent);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .page-header h1 {
-    font-size: 28px;
+    font-family: var(--display);
+    font-size: 34px;
     color: #ffffff;
-    font-weight: 800;
-    letter-spacing: -0.8px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
 }
 
 .page-header p {
-    color: rgba(244, 246, 248, 0.75);
-    font-size: 14px;
-    margin-top: 6px;
+    color: rgba(244, 246, 248, 0.65);
+    font-size: 13px;
+    margin-top: 8px;
     font-weight: 500;
+    letter-spacing: 0.2px;
 }
 
 /* ===================== BUTTONS ===================== */
@@ -343,9 +366,120 @@ body::after {
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
     margin-bottom: 28px;
+}
+
+.stat-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px 26px;
+    margin-bottom: 0;
+    text-align: left;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.18);
+    border-color: rgba(126, 184, 232, 0.3);
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.stat-icon svg { width: 21px; height: 21px; }
+
+.stat-icon--blue   { background: rgba(126, 184, 232, 0.16); color: #8fc4ed; }
+.stat-icon--amber  { background: rgba(232, 178, 110, 0.16); color: #e8b26e; }
+.stat-icon--green  { background: rgba(110, 222, 164, 0.16); color: #6edea4; }
+.stat-icon--violet { background: rgba(178, 150, 224, 0.16); color: #b296e0; }
+
+.stat-card h3 {
+    font-size: 11px;
+    color: rgba(244, 246, 248, 0.55);
+    margin-bottom: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+
+/* Signature treatment: oversized display serif with tabular figures and a
+   hairline tick, echoing a transcript/gradebook line rather than a generic
+   dashboard "metric card" glow. */
+.stat-card p {
+    font-family: var(--display) !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    font-size: 36px !important;
+    font-variant-numeric: tabular-nums;
+    text-shadow: none;
+    margin-top: 10px !important;
+    position: relative;
+    display: inline-block;
+    padding-top: 12px;
+}
+
+.stat-card p::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.25s ease;
+}
+
+.stat-card:hover p::before { width: 36px; }
+
+/* ===================== OVERVIEW BODY GRID ===================== */
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 22px;
+    align-items: start;
+}
+
+.at-a-glance .glance-list {
+    list-style: none;
+}
+
+.glance-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glance-list li:last-child { border-bottom: none; }
+
+.glance-list li span {
+    font-size: 11px;
+    color: rgba(244, 246, 248, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+.glance-list li strong {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 600;
 }
 
 .card {
@@ -368,13 +502,14 @@ body::after {
 }
 
 .card h2 {
-    font-size: 19px;
+    font-family: var(--display);
+    font-size: 21px;
     color: #ffffff;
     margin-bottom: 22px;
-    font-weight: 800;
+    font-weight: 600;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--glass-border);
-    letter-spacing: -0.4px;
+    letter-spacing: -0.2px;
 }
 
 .card h3 {
@@ -386,12 +521,6 @@ body::after {
     letter-spacing: 1px;
 }
 
-/* The big numbers inside stat cards (inline-styled in HTML) inherit this */
-.stats-grid .card p {
-    color: #ffffff !important;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
-}
-
 /* ===================== TABLES ===================== */
 
 .table-container {
@@ -399,6 +528,7 @@ body::after {
     border-radius: 12px;
     border: 1px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.04);
+    text-align: left;
 }
 
 .data-table {
@@ -424,6 +554,7 @@ body::after {
 
 .data-table td {
     padding: 16px 22px;
+    text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 14px;
     color: rgba(244, 246, 248, 0.9);
@@ -512,7 +643,7 @@ body::after {
     background: rgba(255, 255, 255, 0.05);
     margin-bottom: 10px;
     border-radius: 10px;
-    border-left: 3px solid #7eb8e8;
+    border-left: 3px solid var(--accent);
     transition: all 0.25s ease;
 }
 
@@ -531,7 +662,7 @@ body::after {
 }
 
 .reports-grid .card { text-align: center; padding: 34px 26px; }
-.reports-grid .card h3 { font-size: 16px; margin-bottom: 12px; color: #ffffff; text-transform: none; letter-spacing: -0.2px; }
+.reports-grid .card h3 { font-family: var(--display); font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #ffffff; text-transform: none; letter-spacing: -0.1px; }
 .reports-grid .card p { color: rgba(244, 246, 248, 0.7); font-size: 14px; margin-bottom: 22px; line-height: 1.7; font-weight: 500; }
 
 /* ===================== BADGES ===================== */
@@ -596,7 +727,8 @@ body::after {
     .sidebar { width: 210px; }
     .main-content { margin-left: 210px; padding: 22px; }
     .page-header h1 { font-size: 24px; }
-    .stats-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .overview-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 576px) {
@@ -608,4 +740,5 @@ body::after {
     .user-info { display: none; }
     .page-header { padding: 18px 22px; }
     .card { padding: 22px; }
+    .stats-grid { grid-template-columns: 1fr; }
 }
