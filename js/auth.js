@@ -61,8 +61,6 @@ if (loginForm) {
             });
             localStorage.setItem('systemActivity', JSON.stringify(activity));
             
-            alert('Login successful! Welcome ' + users[role].fullName);
-            
             window.location.href = dashboardPages[role];
             
         } else {
